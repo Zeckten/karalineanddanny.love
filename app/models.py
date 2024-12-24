@@ -15,3 +15,31 @@ class User(db.Model, UserMixin):
 
     def __repr__(self):
         return f"User('{self.username}', '{self.email}')"
+
+class Coupon(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(100), nullable=False)
+    description = db.Column(db.String(255), nullable=False)
+    image = db.Column(db.String(255), nullable=False)
+
+    def to_dict(self):
+        return {
+            'title': self.title,
+            'description': self.description,
+            'image': self.image
+        }
+
+class DateIdea(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(100), nullable=False)
+    description = db.Column(db.String(255), nullable=False)
+    image = db.Column(db.String(255), nullable=False)
+    location = db.Column(db.String(255), nullable=False)
+
+    def to_dict(self):
+        return {
+            'title': self.title,
+            'description': self.description,
+            'image': self.image,
+            'location': self.location
+        }

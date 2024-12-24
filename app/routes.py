@@ -1,18 +1,13 @@
 import os
-import json
 import logging
-
-# Configure logging
-logging.basicConfig(level=logging.ERROR)
-
 from flask import render_template, url_for, flash, redirect, current_app, session, request, jsonify
 from flask_login import login_user, current_user, logout_user, login_required
 from werkzeug.security import generate_password_hash, check_password_hash
 from app.forms import RegistrationForm, LoginForm
-from app.models import User, db
-import requests
-import time
-import json
+from app.models import User, db, DateIdea
+
+# Configure logging
+logging.basicConfig(level=logging.ERROR)
 
 def register_routes(app):
     @app.route("/register", methods=['GET', 'POST'])
@@ -88,13 +83,11 @@ def register_routes(app):
     @login_required
     def nylas_callback():
         nylas = current_app.nylas_client
-        # Get the code from the query string after Nylas redirects back
         code = request.args.get('code')
 
         if not code:
             return "No authorization code returned from Nylas", 400
 
-        #try:
         exchange = nylas.auth.exchange_code_for_token(
             request = {
                 'client_id': current_app.config["NYLAS_CLIENT_ID"],
@@ -104,19 +97,10 @@ def register_routes(app):
         )
         
         grant_id = exchange.grant_id
-
-        # You'll use this grant_id to make API calls to Nylas to perform actions on behalf of this account.
-        # Store this in a database, associated with a user
-        print(f"Grant ID: {grant_id}")
-
         current_user.nylas_grant_id = grant_id
         db.session.commit()
 
-        # Redirect to the home page or wherever you want the user to go
         return redirect(url_for('home'))
-
-        #except Exception:
-        #    return "Failed to exchange authorization code for token", 500
 
     @app.route("/account")
     @login_required
@@ -133,13 +117,10 @@ def register_routes(app):
             return {"error": "No Nylas grant ID found for the user"}, 400
 
         try:
-            # Fetch all calendars using the correct list method
             calendars, request_id, next_cursor = nylas.calendars.list(grant_id)
-            
             calendars_with_events = []
             
             for calendar in calendars:
-                # Fetch events for each calendar using the correct list method
                 events, events_request_id, events_cursor = nylas.events.list(
                     grant_id,
                     query_params={
@@ -248,20 +229,16 @@ def register_routes(app):
         image = data.get('image')
         location = data.get('location')
 
-        new_date_idea = {
-            "title": title,
-            "description": description,
-            "image": image,
-            "location": location
-        }
+        new_date_idea = DateIdea(
+            title=title,
+            description=description,
+            image=image,
+            location=location
+        )
 
         try:
-            file_path = os.path.join(current_app.root_path, 'static', 'dates.json')
-            with open(file_path, 'r+') as file:
-                date_ideas = json.load(file)
-                date_ideas.append(new_date_idea)
-                file.seek(0)
-                json.dump(date_ideas, file, indent=4)
+            db.session.add(new_date_idea)
+            db.session.commit()
             return jsonify({'message': 'Date idea added successfully'}), 200
         except Exception as e:
             logging.error(f"Error adding date idea: {e}")

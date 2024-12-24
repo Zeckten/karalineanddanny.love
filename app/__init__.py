@@ -5,6 +5,7 @@ from nylas import Client
 from app.config import Config
 from app.models import db, load_user
 from flask_migrate import Migrate
+from app.load_data import load
 
 migrate = Migrate()
 
@@ -13,7 +14,7 @@ def create_app():
     app.config.from_object(Config)
     db.init_app(app)
     migrate.init_app(app, db)
-
+    
     login_manager = LoginManager(app)
     login_manager.login_view = 'login'
 
@@ -28,8 +29,12 @@ def create_app():
     from app.routes import register_routes
     register_routes(app)
 
-    
+    from app.api import api as api_blueprint
+    app.register_blueprint(api_blueprint)
+
     login_manager.user_loader(load_user)
 
+    with app.app_context():
+        load(db)
 
     return app
