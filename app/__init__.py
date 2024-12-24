@@ -11,9 +11,16 @@ migrate = Migrate()
 
 def create_app():
     app = Flask(__name__)
+    
+    # Load config
     app.config.from_object(Config)
+
+    # Initialize extensions
     db.init_app(app)
     migrate.init_app(app, db)
+    
+    with app.app_context():
+         db.create_all()
     
     login_manager = LoginManager(app)
     login_manager.login_view = 'login'
@@ -23,9 +30,9 @@ def create_app():
         api_key=app.config["NYLAS_API_KEY"],
         api_uri=app.config["NYLAS_API_URI"]
     )
-    app.nylas_client = nylas_client  # Attach the client to the app instance
+    app.nylas_client = nylas_client
 
-    # Register blueprints or routes
+    # Register blueprints
     from app.routes import register_routes
     register_routes(app)
 
