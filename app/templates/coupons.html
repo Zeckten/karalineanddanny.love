@@ -1,0 +1,153 @@
+<!-- filepath: /C:/Users/danmu/Documents/GitHub/karalineanddanny.love/app/templates/home.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coupons</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://bootswatch.com/5/quartz/bootstrap.css" rel="stylesheet">
+    <style>
+        .slider {
+            width: 80%;
+            margin: auto;
+            overflow: hidden;
+            border: 2px dashed #ddd;
+            border-radius: 10px;
+            background-color: #f9f9f9;
+            padding: 20px;
+        }
+        .slides {
+            display: flex;
+            transition: transform 0.5s ease-in-out;
+        }
+        .slide {
+            min-width: 100%;
+            box-sizing: border-box;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            padding: 20px;
+            border: 2px dashed #ccc;
+            border-radius: 10px;
+            background-color: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .slide img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+        }
+        .slide .text {
+            margin-top: 20px;
+            text-align: center;
+        }
+        .slide .text h2 {
+            margin-bottom: 10px;
+            font-size: 24px;
+            color: #333;
+        }
+        .slide .text p {
+            font-size: 16px;
+            color: #666;
+        }
+        .navigation {
+            display: flex;
+            justify-content: center;
+            margin-top: 10px;
+        }
+        .navigation button {
+            padding: 10px;
+            margin: 5px;
+            border: none;
+            background-color: #ddd;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        .navigation button:hover {
+            background-color: #bbb;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="text-center">Coupons</h1>
+        <div class="slider">
+            <div class="slides" id="slides"></div>
+        </div>
+        <div class="navigation mt-3">
+            <button onclick="prevSlide()" class="btn btn-secondary">Previous</button>
+            <button onclick="nextSlide()" class="btn btn-secondary">Next</button>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM fully loaded and parsed');
+            fetch('/static/coupons.json')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok ' + response.statusText);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Coupons data:', data);
+                    const slidesContainer = document.getElementById('slides');
+                    data.forEach(coupon => {
+                        const slide = document.createElement('div');
+                        slide.className = 'slide coupon';
+                        slide.innerHTML = `
+                            <img src="${coupon.image}" alt="${coupon.title}">
+                            <div class="text">
+                                <h2>${coupon.title}</h2>
+                                <p>${coupon.description}</p>
+                            </div>
+                        `;
+                        slidesContainer.appendChild(slide);
+                        console.log(`Loaded slide: ${coupon.title}`);
+                    });
+
+                    // Update totalSlides after slides are added
+                    totalSlides = document.querySelectorAll('.slide').length;
+                    console.log('Total slides:', totalSlides);
+                    updateSlidePosition();
+                })
+                .catch(error => console.error('Error loading coupons:', error));
+        });
+
+        let currentSlide = 0;
+        let totalSlides = 0;
+
+        function updateSlidePosition() {
+            const slides = document.querySelector('.slides');
+            slides.style.transform = `translateX(-${currentSlide * 100}%)`;
+            console.log('Updated slide position:', currentSlide);
+        }
+
+        function prevSlide() {
+            if (currentSlide === 0) {
+                currentSlide = totalSlides - 1;
+            } else {
+                currentSlide--;
+            }
+            updateSlidePosition();
+        }
+
+        function nextSlide() {
+            if (currentSlide === totalSlides - 1) {
+                currentSlide = 0;
+            } else {
+                currentSlide++;
+            }
+            updateSlidePosition();
+        }
+    </script>
+</body>
+</html>

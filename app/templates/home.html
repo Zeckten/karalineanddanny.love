@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <link rel="icon" type="image/x-icon" href="/static/images/favicon.ico">
+    <link href="https://bootswatch.com/5/quartz/bootstrap.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="text-center">Home</h1>
+        <p class="text-center">Welcome, {{ current_user.username }}!</p>
+        <div class="text-center mb-4">
+            <a href="{{ url_for('logout') }}" class="btn btn-primary">Logout</a>
+        </div>
+
+        <div class="row">
+            <div class="col-md-3">
+                <div class="card">
+                    <img src="/static/images/coupon.png" class="card-img-top" alt="Coupons">
+                    <div class="card-body">
+                        <h5 class="card-title">Coupons</h5>
+                        <p class="card-text">View and redeem coupons.</p>
+                        <a href="{{ url_for('coupons') }}" class="btn btn-primary">Go to Coupons</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card">
+                    <img src="https://via.placeholder.com/300x200?text=Date Spinner" class="card-img-top" alt="Spinner">
+                    <div class="card-body">
+                        <h5 class="card-title">Date Spinner</h5>
+                        <p class="card-text">Spin for epic date ideas</p>
+                        <a href="{{ url_for('spinner') }}" class="btn btn-primary">Go to Spinner</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card">
+                    <img src="https://via.placeholder.com/300x200?text=Calendar" class="card-img-top" alt="Calendar">
+                    <div class="card-body">
+                        <h5 class="card-title">Calendar</h5>
+                        <p class="card-text">View Calendar</p>
+                        <a href="{{ url_for('calendar') }}" class="btn btn-primary">Go to Calendar</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card">
+                    <img src="https://via.placeholder.com/300x200?text=Nylas+Auth" class="card-img-top" alt="Nylas Auth">
+                    <div class="card-body">
+                        <h5 class="card-title">Nylas Auth</h5>
+                        <p class="card-text">Authenticate with Nylas</p>
+                        <a href="{{ url_for('nylas_auth') }}" class="btn btn-primary">Go to Nylas Auth</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

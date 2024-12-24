@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Date Ideas Spinner</title>
+    <link rel="icon" type="image/x-icon" href="/static/images/favicon.ico">
+    <link href="https://bootswatch.com/5/quartz/bootstrap.css" rel="stylesheet">
+    <style>
+        .form-container, .calendar-options {
+            height: 100%;
+            width: 80%;
+            margin: auto;
+            overflow: hidden;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+        }
+        .slider {
+            position: relative;
+            width: 80%;
+            padding-top: 53.33%; /* Creates 3:2 aspect ratio for the slider */
+            margin: auto;
+            overflow: hidden;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+        }
+        .slides {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            transition: transform 0.5s ease-in-out;
+        }
+        .slide {
+            position: relative;
+            min-width: 100%;
+            height: 100%;
+            box-sizing: border-box;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            padding: 20px;
+            border: 2px solid #ccc;
+            border-radius: 10px;
+            background-color: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .image-container {
+            width: 100%;
+            height: 100%;
+            position: relative;
+        }
+        img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: contain; /* Ensure images shrink to fit */
+            border-radius: 10px;
+        }
+        .slide .text {
+            margin-top: 20px;
+            text-align: center;
+        }
+        .slide .text h2 {
+            margin-bottom: 10px;
+            font-size: 24px;
+            color: #333;
+        }
+        .slide .text p {
+            font-size: 16px;
+            color: #666;
+        }
+        .navigation {
+            display: flex;
+            justify-content: center;
+            margin-top: 10px;
+        }
+        .navigation button {
+            padding: 10px;
+            margin: 5px;
+            border: none;
+            background-color: #ddd;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        .navigation button:hover {
+            background-color: #bbb;
+        }
+        .form-container, .calendar-options {
+            margin-top: 20px;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.8); /* Translucent background */
+        }
+        .form-container form {
+            color: #000; /* Set font color to black */
+        }
+        .form-control::placeholder {
+            color: #000; /* Set placeholder color to black */
+        }
+        input[type="date"],
+        input[type="time"],
+        select {
+            color: #000 !important;
+            background-color: #fff !important;
+            border: #ccc 1px solid !important;
+        }
+
+        select option {
+            color: #000 !important;
+            background-color: #fff !important;
+            border: #ccc 1px solid !important;
+        }
+
+        select:focus {
+            color: #000 !important;
+            background-color: #fff !important;
+            border: #ccc 1px solid !important;
+        }
+
+        .form-control {
+            border: 1px solid #ccc; /* Add border around text boxes */
+            background-color: #fff; /* Set background color to white */
+        }
+        .calendar-options button,
+        .form-container button {
+            display: inline-block;
+            width: auto;
+            margin-top: 10px;
+        }
+        .calendar-options,
+        .form-container {
+            text-align: center;
+        }
+        .time-range {
+            display: flex;
+            justify-content: space-between;
+        }
+        .time-range input {
+            width: 48%;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="text-center">Date Ideas Spinner</h1>
+        <div class="slider">
+            <div class="slides" id="slides"></div>
+        </div>
+        <div class="navigation mt-3">
+            <button onclick="spin()" class="btn btn-secondary">Spin</button>
+        </div>
+        <div class="calendar-options">
+            <h2 class="text-center">Book Date</h2>
+            <input type="date" id="date" class="form-control mb-2">
+            <div class="time-range">
+                <input type="time" id="startTime" class="form-control mb-2" placeholder="Start Time">
+                <input type="time" id="endTime" class="form-control mb-2" placeholder="End Time">
+            </div>
+            <select class="form-control mb-2" id="calendarSelect" required>
+                <option value="" disabled selected>Select a calendar</option>
+                <!-- Options will be populated dynamically -->
+            </select>
+            <button class="btn btn-primary" onclick="addToCalendar()">Add to Calendar</button>
+        </div>
+        <div class="form-container">
+            <h2 class="text-center">Add New Date Idea</h2>
+            <form id="newDateIdeaForm">
+                <input type="text" class="form-control mb-2" id="title" placeholder="Enter title" required>
+                <textarea class="form-control mb-2" id="description" rows="3" placeholder="Enter description" required></textarea>
+                <input type="url" class="form-control mb-2" id="image" placeholder="Enter image URL" required>
+                <input type="text" class="form-control mb-2" id="location" placeholder="Enter location" required>
+                <button type="submit" class="btn btn-primary">Add Date Idea</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM fully loaded and parsed');
+            fetch('/static/dates.json')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok ' + response.statusText);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Date ideas data:', data);
+                    const slidesContainer = document.getElementById('slides');
+                    data.forEach(idea => {
+                        const slide = document.createElement('div');
+                        slide.className = 'slide';
+                        slide.innerHTML = `
+                            <div class="image-container">
+                                <img src="${idea.image}" alt="${idea.title}">
+                            </div>
+                            <div class="text">
+                                <h2>${idea.title}</h2>
+                                <p>${idea.description}</p>
+                                <p><strong>Location:</strong> ${idea.location}</p>
+                            </div>
+                        `;
+                        slidesContainer.appendChild(slide);
+                        console.log(`Loaded slide: ${idea.title}`);
+                    });
+
+                    // Update totalSlides after slides are added
+                    totalSlides = document.querySelectorAll('.slide').length;
+                    console.log('Total slides:', totalSlides);
+
+                    // Fetch calendars and populate the dropdowns
+                    fetch('/api/calendars')
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error('Network response was not ok ' + response.statusText);
+                            }
+                            return response.json();
+                        })
+                        .then(data => {
+                            console.log('Calendars data:', data);
+                            data.calendars.forEach(calendar => {
+                                const option = document.createElement('option');
+                                option.value = calendar.id;
+                                option.textContent = calendar.name;
+                                document.querySelectorAll('select[id^="calendarSelect"]').forEach(select => {
+                                    select.appendChild(option.cloneNode(true));
+                                });
+                            });
+                        })
+                        .catch(error => console.error('Error loading calendars:', error));
+                })
+                .catch(error => console.error('Error loading date ideas:', error));
+        });
+
+        let totalSlides = 0;
+
+        function spin() {
+            const randomSlide = Math.floor(Math.random() * totalSlides);
+            const slides = document.querySelector('.slides');
+            slides.style.transform = 'translateX(' + (-randomSlide * 100) + '%)';
+            console.log('Spun to slide:', randomSlide);
+        }
+
+        function addToCalendar() {
+            const title = document.querySelector('.slide.active .text h2').textContent;
+            const description = document.querySelector('.slide.active .text p').textContent;
+            const location = document.querySelector('.slide.active .text p strong').textContent;
+            const date = document.getElementById('date').value;
+            const startTime = document.getElementById('startTime').value;
+            const endTime = document.getElementById('endTime').value;
+            const calendarId = document.getElementById('calendarSelect').value;
+
+            const [startYear, startMonth, startDay] = date.split('-');
+            const [startHours, startMinutes] = startTime.split(':');
+            const [endHours, endMinutes] = endTime.split(':');
+            const startTimestamp = new Date(startYear, startMonth - 1, startDay, startHours, startMinutes).getTime() / 1000;
+            const endTimestamp = new Date(startYear, startMonth - 1, startDay, endHours, endMinutes).getTime() / 1000;
+
+            fetch('/add-to-calendar', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ title, description, location, startTime: startTimestamp, endTime: endTimestamp, calendarId })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok ' + response.statusText);
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('Event added to calendar:', data);
+                alert('Event added to calendar!');
+            })
+            .catch(error => console.error('Error adding event to calendar:', error));
+        }
+
+        document.getElementById('newDateIdeaForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const title = document.getElementById('title').value;
+            const description = document.getElementById('description').value;
+            const image = document.getElementById('image').value;
+            const location = document.getElementById('location').value;
+
+            fetch('/add-date-idea', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ title, description, image, location })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok ' + response.statusText);
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('Date idea added:', data);
+                alert('Date idea added!');
+                location.reload(); // Reload the page to show the new date idea
+            })
+            .catch(error => console.error('Error adding date idea:', error));
+        });
+    </script>
+</body>
+</html>

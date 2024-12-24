@@ -1,2 +1,4 @@
 **my-venv/
+**__pycache__/
 .env
+**instance/

@@ -1,0 +1,17 @@
+[
+    {
+        "title": "Coupon 1 Title",
+        "description": "Coupon 1 description goes here.",
+        "image": "/static/images/Regal_Cinemas_logo_2018.png"
+    },
+    {
+        "title": "Coupon 2 Title",
+        "description": "Coupon 2 description goes here.",
+        "image": "https://via.placeholder.com/800x400?text=Coupon+2"
+    },
+    {
+        "title": "Coupon 3 Title",
+        "description": "Coupon 3 description goes here.",
+        "image": "https://via.placeholder.com/800x400?text=Coupon+3"
+    }
+]
