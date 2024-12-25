@@ -1,5 +1,6 @@
 import os
 import logging
+from functools import wraps
 from flask import render_template, url_for, flash, redirect, current_app, session, request, jsonify
 from flask_login import login_user, current_user, logout_user, login_required
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -8,6 +9,15 @@ from app.models import User, db, DateIdea, Coupon
 
 # Configure logging
 logging.basicConfig(level=logging.ERROR)
+
+def admin_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if not current_user.admin:
+            flash('You do not have permission to access this page.', 'danger')
+            return redirect(url_for('home'))
+        return f(*args, **kwargs)
+    return decorated_function
 
 def register_routes(app):
     @app.route("/register", methods=['GET', 'POST'])
@@ -242,29 +252,58 @@ def register_routes(app):
             logging.error(f"Error adding event to calendar: {e}")
             return jsonify({'error': str(e)}), 500
 
-    @app.route('/add-date-idea', methods=['POST'])
+    @app.route('/add/date_idea', methods=['GET', 'POST'])
     @login_required
     def add_date_idea():
-        data = request.json
-        title = data.get('title')
-        description = data.get('description')
-        image = data.get('image')
-        location = data.get('location')
+        if request.method == "POST":
+            title = request.form['title']
+            description = request.form['description']
+            image = request.form['image']
+            location = request.form['location']
+            new_date_idea = DateIdea(title=title, description=description, image=image, location=location)
+            try:
+                db.session.add(new_date_idea)
+                db.session.commit()
+                flash('Date idea added successfully', 'success')
+            except Exception as e:
+                logging.error(f"Error adding date idea: {e}")
+                flash('Error adding date idea', 'danger')
+        return redirect(request.referrer or url_for('date_ideas'))
 
-        new_date_idea = DateIdea(
-            title=title,
-            description=description,
-            image=image,
-            location=location
-        )
+    @app.route('/add/coupon', methods=['GET', 'POST'])
+    @login_required
+    def add_coupon():
+        if request.method == "POST":
+            title = request.form['title']
+            description = request.form['description']
+            image = request.form['image']
+            new_coupon = Coupon(title=title, description=description, image=image)
+            try:
+                db.session.add(new_coupon)
+                db.session.commit()
+                flash('Coupon added successfully', 'success')
+            except Exception as e:
+                logging.error(f"Error adding coupon: {e}")
+                flash('Error adding coupon', 'danger')
+        return redirect(request.referrer or url_for('coupons'))
 
-        try:
-            db.session.add(new_date_idea)
-            db.session.commit()
-            return jsonify({'message': 'Date idea added successfully'}), 200
-        except Exception as e:
-            logging.error(f"Error adding date idea: {e}")
-            return jsonify({'error': str(e)}), 500
+    @app.route('/add/user', methods=['GET', 'POST'])
+    @login_required
+    def add_user():
+        if request.method == "POST":
+            username = request.form['username']
+            email = request.form['email']
+            password = request.form['password']
+            hashed_password = generate_password_hash(password)
+            new_user = User(username=username, email=email, password=hashed_password)
+            try:
+                db.session.add(new_user)
+                db.session.commit()
+                flash('User added successfully', 'success')
+            except Exception as e:
+                logging.error(f"Error adding user: {e}")
+                flash('Error adding user', 'danger')
+        return redirect(request.referrer or url_for('home'))
 
     @app.route("/api/coupons", methods=["GET"])
     @login_required
@@ -276,28 +315,115 @@ def register_routes(app):
     @login_required
     def redeem_coupon(id):
         coupon = Coupon.query.get_or_404(id)
+        if coupon.redeemed:
+            return jsonify({'message': 'Coupon already redeemed'}), 400
+
         coupon.redeemed = True
         db.session.commit()
 
         # Send email to all users using Nylas
         users = User.query.all()
         nylas = current_app.nylas_client
-        users = User.query.all()
-
         for user in users:
             try:
-                # Create email data
                 email_data = {
                     "to": [{"email": user.email}],
                     "subject": "Coupon Redeemed",
-                    "body": f'{current_user.username} has redeemed the coupon: {coupon.title}.'
+                    "body": f'"{current_user.username}" has redeemed the coupon: "{coupon.title}".'
                 }
-                logging.info(email_data)
-                nylas.messages.send(current_user.nylas_grant_id, email_data)
-                
+                draft = nylas.drafts.create()
+                draft.update(email_data)
+                draft.send()
             except Exception as e:
                 logging.error(f"Error sending email to {user.email}: {e}")
 
-
         return jsonify({'message': 'Coupon redeemed successfully'})
+
+    @app.route("/admin")
+    @login_required
+    @admin_required
+    def admin_panel():
+        users = User.query.all()
+        coupons = Coupon.query.all()
+        date_ideas = DateIdea.query.all()
+        return render_template('admin.html', users=users, coupons=coupons, date_ideas=date_ideas)
+
+    @app.route('/admin/edit/user', methods=['GET', 'POST'])
+    @app.route('/admin/edit/user/<int:id>', methods=['GET', 'POST'])
+    @login_required
+    @admin_required
+    def edit_user(id=None):
+        user = User.query.get(id) if id else None
+        if request.method == "POST":
+            if user:
+                user.username = request.form['username']
+                user.email = request.form['email']
+                if request.form['password']:
+                    user.password = generate_password_hash(request.form['password'])
+                user.admin = 'admin' in request.form
+            else:
+                username = request.form['username']
+                email = request.form['email']
+                password = request.form['password']
+                hashed_password = generate_password_hash(password)
+                admin = 'admin' in request.form
+                user = User(username=username, email=email, password=hashed_password, admin=admin)
+                db.session.add(user)
+            db.session.commit()
+            flash('User saved successfully', 'success')
+            return redirect(url_for('admin_panel'))
+        return render_template('edit_user.html', user=user)
+
+    @app.route('/admin/edit/coupon', methods=['GET', 'POST'])
+    @app.route('/admin/edit/coupon/<int:id>', methods=['GET', 'POST'])
+    @login_required
+    @admin_required
+    def edit_coupon(id=None):
+        coupon = Coupon.query.get(id) if id else None
+        if request.method == "POST":
+            if coupon:
+                coupon.title = request.form['title']
+                coupon.description = request.form['description']
+                coupon.image = request.form['image']
+                coupon.redeemed = 'redeemed' in request.form
+            else:
+                title = request.form['title']
+                description = request.form['description']
+                image = request.form['image']
+                coupon = Coupon(title=title, description=description, image=image)
+                db.session.add(coupon)
+            db.session.commit()
+            flash('Coupon saved successfully', 'success')
+            return redirect(url_for('admin_panel'))
+        return render_template('edit_coupon.html', coupon=coupon)
+
+    @app.route('/admin/edit/date_idea', methods=['GET', 'POST'])
+    @app.route('/admin/edit/date_idea/<int:id>', methods=['GET', 'POST'])
+    @login_required
+    @admin_required
+    def edit_date_idea(id=None):
+        date_idea = DateIdea.query.get(id) if id else None
+        if request.method == "POST":
+            if date_idea:
+                date_idea.title = request.form['title']
+                date_idea.description = request.form['description']
+                date_idea.image = request.form['image']
+                date_idea.location = request.form['location']
+            else:
+                title = request.form['title']
+                description = request.form['description']
+                image = request.form['image']
+                location = request.form['location']
+                date_idea = DateIdea(title=title, description=description, image=image, location=location)
+                db.session.add(date_idea)
+            db.session.commit()
+            flash('Date idea saved successfully', 'success')
+            return redirect(url_for('admin_panel'))
+        return render_template('edit_date_idea.html', date_idea=date_idea)
+
+    @app.route("/api/dates", methods=["GET"])
+    @login_required
+    def get_date_ideas():
+        date_ideas = DateIdea.query.all()
+        return jsonify([date_idea.to_dict() for date_idea in date_ideas])
 

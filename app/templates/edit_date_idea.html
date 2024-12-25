@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block title %}{% if date_idea %}Edit Date Idea{% else %}Add Date Idea{% endif %}{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="mb-4">{% if date_idea %}Edit Date Idea{% else %}Add Date Idea{% endif %}</h1>
+    <form method="POST" action="{{ url_for('admin.edit_date_idea', id=date_idea.id) if date_idea else url_for('admin.edit_date_idea') }}">
+        <div class="form-group">
+            <label for="title">Title</label>
+            <input type="text" class="form-control" id="title" name="title" value="{{ date_idea.title if date_idea else '' }}" required>
+        </div>
+        <div class="form-group">
+            <label for="description">Description</label>
+            <textarea class="form-control" id="description" name="description" required>{{ date_idea.description if date_idea else '' }}</textarea>
+        </div>
+        <div class="form-group">
+            <label for="image">Image URL</label>
+            <input type="text" class="form-control" id="image" name="image" value="{{ date_idea.image if date_idea else '' }}" required>
+        </div>
+        <div class="form-group">
+            <label for="location">Location</label>
+            <input type="text" class="form-control" id="location" name="location" value="{{ date_idea.location if date_idea else '' }}" required>
+        </div>
+        <button type="submit" class="btn btn-primary mt-3">{% if date_idea %}Save Changes{% else %}Add Date Idea{% endif %}</button>
+    </form>
+</div>
+{% endblock %}

@@ -13,4 +13,4 @@ class Config:
     NYLAS_CLIENT_ID = os.getenv("NYLAS_CLIENT_ID")
     NYLAS_API_KEY = os.getenv("NYLAS_API_KEY")
     NYLAS_API_URI = os.getenv("NYLAS_API_URI", "https://api.nylas.com")
-    NYLAS_CALLBACK_URI = os.getenv("NYLAS_CALLBACK_URI", "http://localhost:5000/oauth/exchange")
+    NYLAS_CALLBACK_URI = os.getenv("NYLAS_CALLBACK_URI")

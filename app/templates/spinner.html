@@ -50,7 +50,7 @@
         height: 100%;
         position: relative;
     }
-    img {
+    .slide img {
         position: absolute;
         top: 0;
         left: 0;
@@ -80,13 +80,6 @@
     .navigation button {
         padding: 10px;
         margin: 5px;
-        border: none;
-        background-color: #ddd;
-        cursor: pointer;
-        border-radius: 5px;
-    }
-    .navigation button:hover {
-        background-color: #bbb;
     }
     .form-container, .calendar-options {
         margin-top: 20px;
@@ -140,17 +133,25 @@
     .time-range input {
         width: 48%;
     }
+    .hide-checkbox {
+        position: absolute;
+        margin-top: 10px;
+        color: #000;
+        bottom: 2%;
+        right: 2%;
+    }
 </style>
 {% endblock %}
 
 {% block content %}
-<div class="container mt-5">
-    <h1 class="text-center">Date Ideas Spinner</h1>
+<div class="container">
+    <h1 class="text-center" style="padding: 20px;">Date Ideas Spinner</h1>
     <div class="slider">
         <div class="slides" id="slides"></div>
     </div>
     <div class="navigation mt-3">
-        <button onclick="spin()" class="btn btn-secondary">Spin</button>
+        <button onclick="spin()" class="btn btn-success">Spin</button>
+        <button onclick="clearHidden()" class="btn btn-secondary">Reset</button>
     </div>
     <div class="calendar-options">
         <h2 class="text-center">Book Date</h2>
@@ -185,7 +186,7 @@
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         console.log('DOM fully loaded and parsed');
-        fetch('/api/dates')
+        fetch('{{ url_for("api.get_date_ideas") }}')
             .then(response => {
                 if (!response.ok) {
                     throw new Error('Network response was not ok ' + response.statusText);
@@ -195,21 +196,29 @@
             .then(data => {
                 console.log('Date ideas data:', data);
                 const slidesContainer = document.getElementById('slides');
+                const hiddenSlides = getHiddenSlides();
                 data.forEach(idea => {
-                    const slide = document.createElement('div');
-                    slide.className = 'slide';
-                    slide.innerHTML = `
-                        <div class="image-container">
-                            <img src="${idea.image}" alt="${idea.title}">
-                        </div>
-                        <div class="text">
-                            <h2>${idea.title}</h2>
-                            <p>${idea.description}</p>
-                            <p><strong>Location:</strong> ${idea.location}</p>
-                        </div>
-                    `;
-                    slidesContainer.appendChild(slide);
-                    console.log(`Loaded slide: ${idea.title}`);
+                    console.log('Processing idea:', idea);
+                    if (!hiddenSlides.includes(idea.title)) {
+                        const slide = document.createElement('div');
+                        slide.className = 'slide';
+                        slide.innerHTML = `
+                            <div class="image-container">
+                                <img src="${idea.image}" alt="${idea.title}">
+                            </div>
+                            <div class="text">
+                                <h2>${idea.title}</h2>
+                                <p>${idea.description}</p>
+                                <p><strong>Location:</strong> ${idea.location}</p>
+                                <div class="hide-checkbox">
+                                    <input type="checkbox" id="hide-${idea.id}" onclick="toggleHide(${idea.id})">
+                                    <label for="hide-${idea.id}">Hide</label>
+                                </div>
+                            </div>
+                        `;
+                        slidesContainer.appendChild(slide);
+                        console.log(`Loaded slide: ${idea.title}`);
+                    }
                 });
 
                 // Update totalSlides after slides are added
@@ -221,7 +230,7 @@
                 updateSlidePosition();
 
                 // Fetch calendars and populate the dropdowns
-                fetch('/api/calendars')
+                fetch('{{ url_for("api.get_calendars_and_events") }}')
                     .then(response => {
                         if (!response.ok) {
                             throw new Error('Network response was not ok ' + response.statusText);
@@ -275,7 +284,7 @@
         const startTimestamp = new Date(startYear, startMonth - 1, startDay, startHours, startMinutes).getTime() / 1000;
         const endTimestamp = new Date(startYear, startMonth - 1, startDay, endHours, endMinutes).getTime() / 1000;
 
-        fetch('/add-to-calendar', {
+        fetch('{{ url_for("api.add_to_calendar") }}', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -302,7 +311,7 @@
         const image = document.getElementById('image').value;
         const location = document.getElementById('location').value;
 
-        fetch('/add-date-idea', {
+        fetch('{{ url_for("api.add_date_idea") }}', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -322,5 +331,49 @@
         })
         .catch(error => console.error('Error adding date idea:', error));
     });
+
+    function toggleHide(title) {
+        fetch('{{ url_for("api.toggle_hide_slide", title='') }}'.replace('', title), {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok ' + response.statusText);
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('Slide visibility toggled:', data);
+            location.reload();
+        })
+        .catch(error => console.error('Error toggling slide visibility:', error));
+    }
+
+    function clearHidden() {
+        fetch('{{ url_for("api.clear_hidden_slides") }}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok ' + response.statusText);
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('Hidden slides cleared:', data);
+            location.reload();
+        })
+        .catch(error => console.error('Error clearing hidden slides:', error));
+    }
+
+    function getHiddenSlides() {
+        return {{ hidden_slides | tojson | safe }};
+    }
 </script>
 {% endblock %}

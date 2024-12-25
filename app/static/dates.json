@@ -1,62 +1,62 @@
 [
     {
         "title": "Heart and Soul",
-        "description": "Husky cup 2.0 coming soon",
+        "description": "Husky cup 2.0 coming soon.",
         "image": "static/images/heart-and-soul-logo.png",
         "location": "108 Winslow Way W, Bainbridge Island, WA 98110"
     },
     {
         "title": "Woodland Park Zoo",
-        "description": "I promise they're nice to the animals",
+        "description": "I promise they're nice to the animals.",
         "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQt2yJkShdJeueG8eTikfs_O_cDFw_BUePeXg&s",
         "location": "750 N. 50th Street, Seattle, WA 98103"
     },
     {
         "title": "Seattle Aquarium",
-        "description": "Description for Date Idea 3",
-        "image": "https://via.placeholder.com/800x400?text=Date+Idea+3",
-        "location": "Location for Date Idea 3"
+        "description": "I probably won't push you in.",
+        "image": "https://www.seattleaquarium.org/wp-content/uploads/2023/11/host-an-event-dome.jpg",
+        "location": "1483 Alaskan Way Pier 59, Seattle, WA 98101"
     },
     {
-        "title": "Point Defiance Zoo & Aquarium",
-        "description": "Description for Date Idea 4",
-        "image": "https://via.placeholder.com/800x400?text=Date+Idea+4",
-        "location": "Location for Date Idea 4"
+        "title": "Game Night",
+        "description": "Just a friendly competition.",
+        "image": "https://cdn.prod.website-files.com/64ea57571d50b02423c4505d/64fa2e16be10283632e0eb1a_monopoly%20logo.png",
+        "location": "Home"
     },
     {
-        "title": "Date Idea 5",
-        "description": "Description for Date Idea 5",
-        "image": "https://via.placeholder.com/800x400?text=Date+Idea+5",
-        "location": "Location for Date Idea 5"
+        "title": "Comedy Club",
+        "description": "I'll bring the tomatoes.",
+        "image": "https://laughscomedyclub.com/wp-content/uploads/2023/09/s-outside-Laughs-.jpg",
+        "location": "5220 Roosevelt Way NE, Seattle, WA 98105"
     },
     {
-        "title": "Date Idea 6",
-        "description": "Description for Date Idea 5",
-        "image": "https://via.placeholder.com/800x400?text=Date+Idea+5",
-        "location": "Location for Date Idea 5"
+        "title": "Legos All Day Long",
+        "description": "You can get one too...",
+        "image": "https://i.ebayimg.com/images/g/JaYAAOSw31VlFdPD/s-l400.jpg",
+        "location": "Home"
     },
     {
-        "title": "Date Idea 7",
-        "description": "Description for Date Idea 5",
-        "image": "https://via.placeholder.com/800x400?text=Date+Idea+5",
-        "location": "Location for Date Idea 5"
+        "title": "Sleepless in Seattle/Themed Movie Night",
+        "description": "We're not making it out of the couch.",
+        "image": "https://storage.googleapis.com/loveable.appspot.com/blog/uploads/2024/07/30095011/use-projector.jpg",
+        "location": "2466 Westlake Ave N, Seattle, WA 98109"
     },
     {
-        "title": "Date Idea 8",
-        "description": "Description for Date Idea 5",
-        "image": "https://via.placeholder.com/800x400?text=Date+Idea+5",
-        "location": "Location for Date Idea 5"
+        "title": "Bob Ross",
+        "description": "Just think of the happy little trees.",
+        "image": "https://www.aaronreedphotography.com/images/xl/Bob-Ross-Portrait.jpg",
+        "location": "Home"
     },
     {
-        "title": "Date Idea 9",
-        "description": "Description for Date Idea 5",
-        "image": "https://via.placeholder.com/800x400?text=Date+Idea+5",
-        "location": "Location for Date Idea 5"
+        "title": "Skyline Lake Trail",
+        "description": "Almost as beautiful as you.",
+        "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSrjKmTxrTKnWIHcXp2sJGLGNflgxG-cTVglQ&s",
+        "location": "Skyline Lake Trail, Leavenworth, WA 98826"
     },
     {
-        "title": "Date Idea 10",
-        "description": "Description for Date Idea 5",
-        "image": "https://via.placeholder.com/800x400?text=Date+Idea+5",
-        "location": "Location for Date Idea 5"
+        "title": "Washington Park Arboretum",
+        "description": "Five bucks if you jump in.",
+        "image": "https://botanicgardens.uw.edu/wp-content/uploads/sites/7/2015/03/090625_3359.jpg",
+        "location": "2300 Arboretum Dr E, Seattle, WA 98112"
     }
 ]

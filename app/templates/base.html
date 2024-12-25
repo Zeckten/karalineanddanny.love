@@ -4,31 +4,44 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}{% endblock %}</title>
-    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="icon" type="image/x-icon" href="/static/images/icons8-pixel-heart-96.png">
     <!-- Bootstrap CSS -->
     <link href="https://bootswatch.com/5/quartz/bootstrap.css" rel="stylesheet">
     <style>
         .navbar {
             background-color: rgba(255, 255, 255, 0.8); /* Translucent background */
             padding: 0 20px; /* Add padding to move the navbar away from the edge */
+            align-items: left;
+            position: relative;
         }
         .navbar-nav .nav-item .nav-link {
             margin: 0 5px;
         }
-        .navbar-nav .nav-item .btn {
-            margin: 0 5px;
+        .navbar-nav .btn{
+            margin: 0 10px;
+            padding: 5px 10px;
         }
         .navbar-brand img {
+            position: relative;
             height: 30px;
             margin-right: 10px;
+        }
+        .navbar-brand {
+            position: relative;
+        }
+        .h1 {
+            padding: 20px;
+        }
+        .container {
+            padding-bottom: 20px; /* Add padding at the bottom of every page */
         }
     </style>
     {% block head %}{% endblock %}
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-light">
-        <a class="navbar-brand" href="{{ url_for('home') }}">
-            <img src="/static/images/favicon.ico" alt="Favicon">
+        <a class="navbar-brand" href="{{ url_for('main.home') }}">
+            <img src="/static/images/icons8-pixel-heart-96.png" alt="Favicon">
             Home
         </a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -36,15 +49,18 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <div class="navbar-nav ml-auto">
-                <a class="btn btn-outline-secondary nav-link" href="{{ url_for('account') }}">Settings</a>
-                <a class="btn btn-outline-primary nav-link" href="{{ url_for('logout') }}">Logout</a>
+                <a class="btn btn-outline-info" href="{{ url_for('main.account') }}">Settings</a>
+                {% if current_user.admin %}
+                    <a class="btn btn-outline-warning" href="{{ url_for('admin.admin_panel') }}">Admin Panel</a>
+                {% endif %}
+                <a class="btn btn-outline-primary" href="{{ url_for('auth.logout') }}">Logout</a>
             </div>
         </div>
     </nav>
     <div class="container mt-2">
         {% if current_user.is_authenticated and not current_user.nylas_grant_id %}
             <div class="alert alert-warning text-center">
-                You have not linked a calendar account. <a href="{{ url_for('nylas_auth') }}" class="btn btn-warning">Link Calendar Account</a>
+                You have not linked a calendar account. <a href="{{ url_for('api.nylas_auth') }}" class="btn btn-warning">Link Calendar Account</a>
             </div>
         {% endif %}
         {% block content %}{% endblock %}

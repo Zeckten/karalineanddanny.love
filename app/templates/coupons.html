@@ -125,12 +125,8 @@
 {% endblock %}
 
 {% block content %}
-<div class="container mt-5">
-    <h1 class="text-center">Coupons</h1>
-    <div class="text-center mb-3">
-        <button class="btn btn-secondary" onclick="toggleView('slider')">Slider View</button>
-        <button class="btn btn-secondary" onclick="toggleView('grid')">Grid View</button>
-    </div>
+<div class="container">
+    <h1 class="text-center" style="padding: 20px;">Coupons</h1>
     <div class="slider" id="sliderView">
         <div class="slides" id="slides"></div>
         <div class="navigation mt-3">
@@ -139,6 +135,10 @@
         </div>
     </div>
     <div class="grid" id="gridView"></div>
+    <div class="text-center mt-1" style="padding-bottom: 20px;">
+        <button class="btn btn-secondary" onclick="toggleView('slider')">Slider View</button>
+        <button class="btn btn-secondary ml-2" onclick="toggleView('grid')">Grid View</button>
+    </div>
 </div>
 
 <!-- Bootstrap JS and dependencies -->
@@ -149,7 +149,7 @@
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         console.log('DOM fully loaded and parsed');
-        fetch('/api/coupons')
+        fetch('{{ url_for("api.get_coupons") }}')
             .then(response => {
                 if (!response.ok) {
                     throw new Error('Network response was not ok ' + response.statusText);
@@ -194,6 +194,9 @@
                 totalSlides = document.querySelectorAll('.slide').length;
                 console.log('Total slides:', totalSlides);
                 updateSlidePosition();
+
+                // Display the slider view by default
+                toggleView('slider');
             })
             .catch(error => console.error('Error loading coupons:', error));
     });
@@ -226,12 +229,13 @@
     }
 
     function redeemCoupon(couponId) {
-        fetch(`/api/coupons/${couponId}/redeem`, {
+        fetch("{{ url_for('api.redeem_coupon', id=0) }}".replace(0, couponId), {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             }
         })
+
         .then(response => {
             if (!response.ok) {
                 throw new Error('Network response was not ok ' + response.statusText);
@@ -241,7 +245,6 @@
         .then(data => {
             console.log('Coupon redeemed:', data);
             alert('Coupon redeemed!');
-            location.reload(); // Reload the page to show the updated coupon status
         })
         .catch(error => console.error('Error redeeming coupon:', error));
     }

@@ -1,0 +1,159 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Panel{% endblock %}
+
+{% block head %}
+<style>
+    .admin-table {
+        width: 100%;
+        margin-top: 20px;
+        color: #333; /* Ensure text color contrasts with background */
+    }
+    .admin-table th, .admin-table td {
+        padding: 10px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+        margin: 0; /* Remove margin */
+    }
+    .admin-table th {
+        background-color: #f2f2f2;
+        color: #333; /* Ensure text color contrasts with background */
+    }
+    .admin-table td {
+        background-color: #fff;
+        color: #333; /* Ensure text color contrasts with background */
+    }
+    .admin-table tr {
+        margin: 0; /* Remove margin */
+    }
+    .admin-table tr:hover {
+        background-color: #f5f5f5;
+    }
+    .admin-table .actions {
+        display: flex;
+        gap: 10px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="mb-4">Admin Panel</h1>
+    
+    <div class="mb-4">
+        <label for="tableSelect" class="form-label">Select Table to Display:</label>
+        <select id="tableSelect" class="form-select" onchange="toggleTable()">
+            <option value="usersTable">Users</option>
+            <option value="couponsTable">Coupons</option>
+            <option value="dateIdeasTable">Date Ideas</option>
+        </select>
+    </div>
+
+    <div id="usersTable" class="admin-table-container">
+        <h2>Users</h2>
+        <a href="{{ url_for('admin.edit_user') }}" class="btn btn-success mb-3">Add User</a>
+        <a href="{{ url_for('admin.download_users') }}" class="btn btn-info mb-3">Download Users JSON</a>
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Username</th>
+                    <th>Email</th>
+                    <th>Admin</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in users %}
+                <tr>
+                    <td>{{ user.id }}</td>
+                    <td>{{ user.username }}</td>
+                    <td>{{ user.email }}</td>
+                    <td>{{ user.admin }}</td>
+                    <td class="actions">
+                        <a href="{{ url_for('admin.edit_user', id=user.id) }}" class="btn btn-primary btn-sm">Edit</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div id="couponsTable" class="admin-table-container" style="display: none;">
+        <h2>Coupons</h2>
+        <a href="{{ url_for('admin.edit_coupon') }}" class="btn btn-success mb-3">Add Coupon</a>
+        <a href="{{ url_for('admin.download_coupons') }}" class="btn btn-info mb-3">Download Coupons JSON</a>
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Title</th>
+                    <th>Description</th>
+                    <th>Image</th>
+                    <th>Redeemed</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for coupon in coupons %}
+                <tr>
+                    <td>{{ coupon.id }}</td>
+                    <td>{{ coupon.title }}</td>
+                    <td>{{ coupon.description }}</td>
+                    <td><img src="{{ coupon.image }}" alt="{{ coupon.title }}" style="width: 50px; height: auto;"></td>
+                    <td>{{ coupon.redeemed }}</td>
+                    <td class="actions">
+                        <a href="{{ url_for('admin.edit_coupon', id=coupon.id) }}" class="btn btn-primary btn-sm">Edit</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div id="dateIdeasTable" class="admin-table-container" style="display: none;">
+        <h2>Date Ideas</h2>
+        <a href="{{ url_for('admin.edit_date_idea') }}" class="btn btn-success mb-3">Add Date Idea</a>
+        <a href="{{ url_for('admin.download_date_ideas') }}" class="btn btn-info mb-3">Download Date Ideas JSON</a>
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Title</th>
+                    <th>Description</th>
+                    <th>Image</th>
+                    <th>Location</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for date_idea in date_ideas %}
+                <tr>
+                    <td>{{ date_idea.id }}</td>
+                    <td>{{ date_idea.title }}</td>
+                    <td>{{ date_idea.description }}</td>
+                    <td><img src="{{ date_idea.image }}" alt="{{ date_idea.title }}" style="width: 50px; height: auto;"></td>
+                    <td>{{ date_idea.location }}</td>
+                    <td class="actions">
+                        <a href="{{ url_for('admin.edit_date_idea', id=date_idea.id) }}" class="btn btn-primary btn-sm">Edit</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    function toggleTable() {
+        const selectedTable = document.getElementById('tableSelect').value;
+        document.querySelectorAll('.admin-table-container').forEach(table => {
+            table.style.display = 'none';
+        });
+        document.getElementById(selectedTable).style.display = 'block';
+    }
+
+    // Display the slider view by default
+    document.getElementById('usersTable').style.display = 'block';
+</script>
+{% endblock %}
