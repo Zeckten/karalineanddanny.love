@@ -20,7 +20,7 @@ class User(db.Model, UserMixin):
 class Coupon(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(255), nullable=False, unique=True)
-    description = db.Column(db.String(255), nullable=False)
+    description = db.Column(db.Text, nullable=False)
     image = db.Column(db.String(255), nullable=False)
     redeemed = db.Column(db.Boolean, default=False)
 
@@ -36,7 +36,7 @@ class Coupon(db.Model):
 class DateIdea(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(255), nullable=False, unique=True)
-    description = db.Column(db.String(255), nullable=False)
+    description = db.Column(db.Text, nullable=False)
     image = db.Column(db.String(255), nullable=False)
     location = db.Column(db.String(255), nullable=False)
 
