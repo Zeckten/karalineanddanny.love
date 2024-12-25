@@ -1,93 +1,90 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nylas Calendar Events</title>
-    <link rel="icon" type="image/x-icon" href="/static/images/favicon.ico">
-    <link href="https://bootswatch.com/5/quartz/bootstrap.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.css" rel="stylesheet">
-    <style>
-        #calendar {
-            max-width: 900px;
-            margin: 0 auto;
-        }
-    </style>
-</head>
-<body>
-    <div class="container mt-5">
-        <h1 class="mb-4 text-center">Nylas Calendar Events</h1>
-        <div id="calendar"></div>
-    </div>
+{% extends "base.html" %}
 
-    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            var calendarEl = document.getElementById('calendar');
-            var calendar = new FullCalendar.Calendar(calendarEl, {
-                initialView: 'dayGridMonth',
-                headerToolbar: {
-                    left: 'prev,next today',
-                    center: 'title',
-                    right: 'dayGridMonth,timeGridWeek,timeGridDay'
-                },
-                events: async function(fetchInfo, successCallback, failureCallback) {
-                    try {
-                        const response = await fetch('/api/calendars');
-                        const data = await response.json();
-                        if (data.error) {
-                            failureCallback(data.error);
-                            return;
-                        }
-                        const events = data.calendars.flatMap(calendar => calendar.events).map(event => ({
-                            title: event.title,
-                            start: new Date(event.start_time * 1000).toISOString(),
-                            end: new Date(event.end_time * 1000).toISOString(),
-                            description: event.description,
-                            location: event.location,
-                            participants: event.participants.map(p => p.name || p.email).join(', ')
-                        }));
-                        successCallback(events);
-                    } catch (error) {
-                        failureCallback(error.message);
+{% block title %}Nylas Calendar Events{% endblock %}
+
+{% block head %}
+<link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.css" rel="stylesheet">
+<style>
+    #calendar {
+        max-width: 900px;
+        margin: 0 auto;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="mb-4 text-center">Nylas Calendar Events</h1>
+    <div id="calendar"></div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var calendarEl = document.getElementById('calendar');
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+            initialView: 'dayGridMonth',
+            headerToolbar: {
+                left: 'prev,next today',
+                center: 'title',
+                right: 'dayGridMonth,timeGridWeek,timeGridDay'
+            },
+            events: async function(fetchInfo, successCallback, failureCallback) {
+                try {
+                    const response = await fetch('/api/calendars');
+                    const data = await response.json();
+                    if (data.error) {
+                        failureCallback(data.error);
+                        return;
                     }
-                },
-                eventClick: function(info) {
-                    var eventObj = info.event;
-                    var modalBody = `
-                        <p><strong>Description:</strong> ${eventObj.extendedProps.description || 'N/A'}</p>
-                        <p><strong>Location:</strong> ${eventObj.extendedProps.location || 'N/A'}</p>
-                        <p><strong>Participants:</strong> ${eventObj.extendedProps.participants || 'N/A'}</p>
-                    `;
-                    var modalHtml = `
-                        <div class="modal fade" id="eventModal" tabindex="-1" aria-labelledby="eventModalLabel" aria-hidden="true">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="eventModalLabel">${eventObj.title}</h5>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                    </div>
-                                    <div class="modal-body">
-                                        ${modalBody}
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                    </div>
+                    const events = data.calendars.flatMap(calendar => calendar.events).map(event => ({
+                        title: event.title,
+                        start: new Date(event.start_time * 1000).toISOString(),
+                        end: new Date(event.end_time * 1000).toISOString(),
+                        description: event.description,
+                        location: event.location,
+                        participants: event.participants.map(p => p.name || p.email).join(', ')
+                    }));
+                    successCallback(events);
+                } catch (error) {
+                    failureCallback(error.message);
+                }
+            },
+            eventClick: function(info) {
+                var eventObj = info.event;
+                var modalBody = `
+                    <p><strong>Description:</strong> ${eventObj.extendedProps.description || 'N/A'}</p>
+                    <p><strong>Location:</strong> ${eventObj.extendedProps.location || 'N/A'}</p>
+                    <p><strong>Participants:</strong> ${eventObj.extendedProps.participants || 'N/A'}</p>
+                `;
+                var modalHtml = `
+                    <div class="modal fade" id="eventModal" tabindex="-1" aria-labelledby="eventModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="eventModalLabel">${eventObj.title}</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    ${modalBody}
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                                 </div>
                             </div>
                         </div>
-                    `;
-                    document.body.insertAdjacentHTML('beforeend', modalHtml);
-                    var eventModal = new bootstrap.Modal(document.getElementById('eventModal'));
-                    eventModal.show();
-                    eventModal._element.addEventListener('hidden.bs.modal', function() {
-                        eventModal._element.remove();
-                    });
-                }
-            });
-            calendar.render();
+                    </div>
+                `;
+                document.body.insertAdjacentHTML('beforeend', modalHtml);
+                var eventModal = new bootstrap.Modal(document.getElementById('eventModal'));
+                eventModal.show();
+                eventModal._element.addEventListener('hidden.bs.modal', function() {
+                    eventModal._element.remove();
+                });
+            }
         });
-    </script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
+        calendar.render();
+    });
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+{% endblock %}

@@ -1,74 +1,62 @@
 [
     {
         "title": "Heart and Soul",
-        "description": "Description for Date Idea 1.",
+        "description": "Husky cup 2.0 coming soon",
         "image": "static/images/heart-and-soul-logo.png",
         "location": "108 Winslow Way W, Bainbridge Island, WA 98110"
     },
     {
         "title": "Woodland Park Zoo",
-        "description": "Description for Date Idea 2.",
-        "image": "https://via.placeholder.com/800x400?text=Date+Idea+2",
-        "location": "Location for Date Idea 2"
+        "description": "I promise they're nice to the animals",
+        "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQt2yJkShdJeueG8eTikfs_O_cDFw_BUePeXg&s",
+        "location": "750 N. 50th Street, Seattle, WA 98103"
     },
     {
         "title": "Seattle Aquarium",
-        "description": "Description for Date Idea 3.",
+        "description": "Description for Date Idea 3",
         "image": "https://via.placeholder.com/800x400?text=Date+Idea+3",
         "location": "Location for Date Idea 3"
     },
     {
         "title": "Point Defiance Zoo & Aquarium",
-        "description": "Description for Date Idea 4.",
+        "description": "Description for Date Idea 4",
         "image": "https://via.placeholder.com/800x400?text=Date+Idea+4",
         "location": "Location for Date Idea 4"
     },
     {
         "title": "Date Idea 5",
-        "description": "Description for Date Idea 5.",
+        "description": "Description for Date Idea 5",
         "image": "https://via.placeholder.com/800x400?text=Date+Idea+5",
         "location": "Location for Date Idea 5"
     },
     {
         "title": "Date Idea 6",
-        "description": "Description for Date Idea 5.",
+        "description": "Description for Date Idea 5",
         "image": "https://via.placeholder.com/800x400?text=Date+Idea+5",
         "location": "Location for Date Idea 5"
     },
     {
         "title": "Date Idea 7",
-        "description": "Description for Date Idea 5.",
+        "description": "Description for Date Idea 5",
         "image": "https://via.placeholder.com/800x400?text=Date+Idea+5",
         "location": "Location for Date Idea 5"
     },
     {
         "title": "Date Idea 8",
-        "description": "Description for Date Idea 5.",
+        "description": "Description for Date Idea 5",
         "image": "https://via.placeholder.com/800x400?text=Date+Idea+5",
         "location": "Location for Date Idea 5"
     },
     {
         "title": "Date Idea 9",
-        "description": "Description for Date Idea 5.",
+        "description": "Description for Date Idea 5",
         "image": "https://via.placeholder.com/800x400?text=Date+Idea+5",
         "location": "Location for Date Idea 5"
     },
     {
         "title": "Date Idea 10",
-        "description": "Description for Date Idea 5.",
+        "description": "Description for Date Idea 5",
         "image": "https://via.placeholder.com/800x400?text=Date+Idea+5",
         "location": "Location for Date Idea 5"
-    },
-    {
-        "title": "Test",
-        "description": "Testicle",
-        "image": "https://cdn-icons-png.flaticon.com/512/1039/1039328.png",
-        "location": "test"
-    },
-    {
-        "title": "Date",
-        "description": "Super epic",
-        "image": "https://icons.veryicon.com/png/o/miscellaneous/esgcc-basic-icon-library/date-71.png",
-        "location": "New York"
     }
 ]

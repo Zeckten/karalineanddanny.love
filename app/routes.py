@@ -3,8 +3,8 @@ import logging
 from flask import render_template, url_for, flash, redirect, current_app, session, request, jsonify
 from flask_login import login_user, current_user, logout_user, login_required
 from werkzeug.security import generate_password_hash, check_password_hash
-from app.forms import RegistrationForm, LoginForm
-from app.models import User, db, DateIdea
+from app.forms import RegistrationForm, LoginForm, ChangePasswordForm
+from app.models import User, db, DateIdea, Coupon
 
 # Configure logging
 logging.basicConfig(level=logging.ERROR)
@@ -71,6 +71,7 @@ def register_routes(app):
     @app.route("/nylas/auth", methods=["GET"])
     @login_required
     def nylas_auth():
+        session['next'] = request.referrer or url_for('home')
         nylas = current_app.nylas_client
         auth_url = nylas.auth.url_for_oauth2({
             "client_id": current_app.config["NYLAS_CLIENT_ID"],
@@ -100,12 +101,33 @@ def register_routes(app):
         current_user.nylas_grant_id = grant_id
         db.session.commit()
 
-        return redirect(url_for('home'))
+        next_url = session.pop('next', url_for('home'))
+        return redirect(next_url)
 
-    @app.route("/account")
+    @app.route("/account", methods=['GET', 'POST'])
     @login_required
     def account():
-        return render_template('account.html', title='Account', user=current_user)
+        nylas_email = None
+        if current_user.nylas_grant_id:
+            nylas = current_app.nylas_client
+            try:
+                account_info = nylas.grants.find(current_user.nylas_grant_id)
+                nylas_email = account_info.data.email
+            except Exception as e:
+                logging.error(f"Error fetching Nylas account info: {e}")
+
+        form = ChangePasswordForm()
+        if form.validate_on_submit():
+            if check_password_hash(current_user.password, form.current_password.data):
+                hashed_password = generate_password_hash(form.new_password.data)
+                current_user.password = hashed_password
+                db.session.commit()
+                flash('Your password has been updated!', 'success')
+                return redirect(url_for('account'))
+            else:
+                flash('Current password is incorrect.', 'danger')
+
+        return render_template('account.html', title='Account', user=current_user, nylas_email=nylas_email, form=form)
 
     @app.route("/api/calendars", methods=["GET"])
     @login_required
@@ -243,4 +265,39 @@ def register_routes(app):
         except Exception as e:
             logging.error(f"Error adding date idea: {e}")
             return jsonify({'error': str(e)}), 500
+
+    @app.route("/api/coupons", methods=["GET"])
+    @login_required
+    def get_coupons():
+        coupons = Coupon.query.all()
+        return jsonify([coupon.to_dict() for coupon in coupons])
+
+    @app.route("/api/coupons/<int:id>/redeem", methods=["POST"])
+    @login_required
+    def redeem_coupon(id):
+        coupon = Coupon.query.get_or_404(id)
+        coupon.redeemed = True
+        db.session.commit()
+
+        # Send email to all users using Nylas
+        users = User.query.all()
+        nylas = current_app.nylas_client
+        users = User.query.all()
+
+        for user in users:
+            try:
+                # Create email data
+                email_data = {
+                    "to": [{"email": user.email}],
+                    "subject": "Coupon Redeemed",
+                    "body": f'{current_user.username} has redeemed the coupon: {coupon.title}.'
+                }
+                logging.info(email_data)
+                nylas.messages.send(current_user.nylas_grant_id, email_data)
+                
+            except Exception as e:
+                logging.error(f"Error sending email to {user.email}: {e}")
+
+
+        return jsonify({'message': 'Coupon redeemed successfully'})
 

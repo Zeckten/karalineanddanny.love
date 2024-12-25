@@ -1,25 +1,81 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ title }}</title>
-    <link rel="icon" type="image/x-icon" href="/static/images/favicon.ico">
-    <link href="https://bootswatch.com/5/quartz/bootstrap.css" rel="stylesheet">
-</head>
-<body>
-    <div class="container mt-5">
-        <h1 class="mb-4">Account Details</h1>
-        <div class="card">
-            <div class="card-body">
-                <p><strong>Username:</strong> {{ user.username }}</p>
-                <p><strong>Email:</strong> {{ user.email }}</p>
-                <p><strong>Nylas Grant ID:</strong> {{ user.nylas_grant_id }}</p>
+{% extends "base.html" %}
+
+{% block title %}Account Details{% endblock %}
+
+{% block head %}
+<style>
+    .hidden-text {
+        position: absolute;
+        bottom: 10px;
+        right: 10px;
+        opacity: 0;
+        transition: opacity 0.3s ease-in-out;
+    }
+    .hidden-text:hover {
+        opacity: 1;
+    }
+    .card-body {
+        position: relative;
+    }
+    .inline-field {
+        display: flex;
+        align-items: center;
+    }
+    .inline-field p {
+        margin-right: 10px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="mb-4">Settings</h1>
+    <div class="card">
+        <div class="card-body">
+            <p><strong>Username:</strong> {{ user.username }}</p>
+            <p><strong>Email:</strong> {{ user.email }}</p>
+            <div>
+                <p><strong>Linked Calendar:</strong> {{ nylas_email }}</p>
+                <a href="{{ url_for('nylas_auth') }}" class="btn btn-primary">
+                    {% if nylas_email %}
+                        Change Calendar Account
+                    {% else %}
+                        Link Calendar Account
+                    {% endif %}
+                </a>
             </div>
+            <p class="hidden-text"><strong>Nylas Grant ID:</strong> {{ user.nylas_grant_id }}</p>
         </div>
     </div>
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-</body>
-</html>
+    <div class="card mt-4">
+        <div class="card-body">
+            <h2>Change Password</h2>
+            <form method="POST" action="{{ url_for('account') }}">
+                {{ form.hidden_tag() }}
+                <div class="form-group">
+                    {{ form.current_password.label(class="form-label") }}
+                    {{ form.current_password(class="form-control") }}
+                    {% for error in form.current_password.errors %}
+                        <div class="text-danger">{{ error }}</div>
+                    {% endfor %}
+                </div>
+                <div class="form-group">
+                    {{ form.new_password.label(class="form-label") }}
+                    {{ form.new_password(class="form-control") }}
+                    {% for error in form.new_password.errors %}
+                        <div class="text-danger">{{ error }}</div>
+                    {% endfor %}
+                </div>
+                <div class="form-group">
+                    {{ form.confirm_password.label(class="form-label") }}
+                    {{ form.confirm_password(class="form-control") }}
+                    {% for error in form.confirm_password.errors %}
+                        <div class="text-danger">{{ error }}</div>
+                    {% endfor %}
+                </div>
+                <button type="submit" class="btn btn-primary mt-1">{{ form.submit.label.text }}</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

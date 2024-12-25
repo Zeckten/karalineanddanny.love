@@ -2,16 +2,61 @@
     {
         "title": "Movie Subscription",
         "description": "3 months of Regal Unlimited, AMC A-List, or other movie theater subscription.",
-        "image": "/static/images/Regal_Cinemas_logo_2018.png"
+        "image": "/static/images/Regal_Cinemas_logo_2018.png",
+        "redeemed": false
     },
     {
         "title": "Coupon 2 Title",
         "description": "Coupon 2 description goes here.",
-        "image": "https://via.placeholder.com/800x400?text=Coupon+2"
+        "image": "https://via.placeholder.com/800x400?text=Coupon+2",
+        "redeemed": false
     },
     {
         "title": "Coupon 3 Title",
         "description": "Coupon 3 description goes here.",
-        "image": "https://via.placeholder.com/800x400?text=Coupon+3"
+        "image": "https://via.placeholder.com/800x400?text=Coupon+3",
+        "redeemed": false
+    },
+    {
+        "title": "Coupon 4 Title",
+        "description": "Coupon 4 description goes here.",
+        "image": "https://via.placeholder.com/800x400?text=Coupon+4",
+        "redeemed": false
+    },
+    {
+        "title": "Coupon 5 Title",
+        "description": "Coupon 5 description goes here.",
+        "image": "https://via.placeholder.com/800x400?text=Coupon+5",
+        "redeemed": false
+    },
+    {
+        "title": "Coupon 6 Title",
+        "description": "Coupon 6 description goes here.",
+        "image": "https://via.placeholder.com/800x400?text=Coupon+6",
+        "redeemed": false
+    },
+    {
+        "title": "Coupon 7 Title",
+        "description": "Coupon 7 description goes here.",
+        "image": "https://via.placeholder.com/800x400?text=Coupon+7",
+        "redeemed": false
+    },
+    {
+        "title": "Coupon 8 Title",
+        "description": "Coupon 8 description goes here.",
+        "image": "https://via.placeholder.com/800x400?text=Coupon+8",
+        "redeemed": false
+    },
+    {
+        "title": "Coupon 9 Title",
+        "description": "Coupon 9 description goes here.",
+        "image": "https://via.placeholder.com/800x400?text=Coupon+9",
+        "redeemed": false
+    },
+    {
+        "title": "Coupon 10 Title",
+        "description": "Coupon 10 description goes here.",
+        "image": "https://via.placeholder.com/800x400?text=Coupon+10",
+        "redeemed": false
     }
 ]

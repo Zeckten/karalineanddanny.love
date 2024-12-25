@@ -3,11 +3,8 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 from nylas import Client
 from app.config import Config
-from app.models import db, load_user
-from flask_migrate import Migrate
+from app.models import *
 from app.load_data import load
-
-migrate = Migrate()
 
 def create_app():
     app = Flask(__name__)
@@ -17,10 +14,12 @@ def create_app():
 
     # Initialize extensions
     db.init_app(app)
-    migrate.init_app(app, db)
+    
+    # Import all models to ensure they're registered  # Import all models here
     
     with app.app_context():
-         db.create_all()
+        recreate_changed_tables(app, db)
+        db.create_all()
     
     login_manager = LoginManager(app)
     login_manager.login_view = 'login'
