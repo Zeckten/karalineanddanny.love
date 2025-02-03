@@ -20,7 +20,12 @@ def home():
 @main.route("/coupons")
 @login_required
 def coupons():
-    return render_template('coupons.html', title='Coupons')
+    return render_template('coupons.html', title='Your Coupons')
+
+@main.route("/coupons/creator")
+@login_required
+def coupon_creator():
+    return render_template('coupon_creator.html', title='Coupons')
 
 @main.route("/spinner")
 @login_required

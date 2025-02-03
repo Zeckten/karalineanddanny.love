@@ -1,62 +1,72 @@
 [
     {
-        "title": "Heart and Soul",
-        "description": "Husky cup 2.0 coming soon.",
-        "image": "static/images/heart-and-soul-logo.png",
-        "location": "108 Winslow Way W, Bainbridge Island, WA 98110"
+      "creator": "Danny",
+      "description": "Husky cup 2.0 coming soon.",
+      "image": "https://heartandsoulbainbridge.com/wp-content/uploads/2017/11/heart-and-soul-logo.png",
+      "location": "108 Winslow Way W, Bainbridge Island, WA 98110",
+      "title": "Heart and Soul"
     },
     {
-        "title": "Woodland Park Zoo",
-        "description": "I promise they're nice to the animals.",
-        "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQt2yJkShdJeueG8eTikfs_O_cDFw_BUePeXg&s",
-        "location": "750 N. 50th Street, Seattle, WA 98103"
+      "creator": "Danny",
+      "description": "I promise they're nice to the animals.",
+      "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQt2yJkShdJeueG8eTikfs_O_cDFw_BUePeXg&s",
+      "location": "750 N. 50th Street, Seattle, WA 98103",
+      "title": "Woodland Park Zoo"
     },
     {
-        "title": "Seattle Aquarium",
-        "description": "I probably won't push you in.",
-        "image": "https://www.seattleaquarium.org/wp-content/uploads/2023/11/host-an-event-dome.jpg",
-        "location": "1483 Alaskan Way Pier 59, Seattle, WA 98101"
+      "creator": "Danny",
+      "description": "I probably won't push you in.",
+      "image": "https://www.seattleaquarium.org/wp-content/uploads/2023/11/host-an-event-dome.jpg",
+      "location": "1483 Alaskan Way Pier 59, Seattle, WA 98101",
+      "title": "Seattle Aquarium"
     },
     {
-        "title": "Game Night",
-        "description": "Just a friendly competition.",
-        "image": "https://cdn.prod.website-files.com/64ea57571d50b02423c4505d/64fa2e16be10283632e0eb1a_monopoly%20logo.png",
-        "location": "Home"
+      "creator": "Danny",
+      "description": "Just a friendly competition.",
+      "image": "https://cdn.prod.website-files.com/64ea57571d50b02423c4505d/64fa2e16be10283632e0eb1a_monopoly%20logo.png",
+      "location": "Home",
+      "title": "Game Night"
     },
     {
-        "title": "Comedy Club",
-        "description": "I'll bring the tomatoes.",
-        "image": "https://laughscomedyclub.com/wp-content/uploads/2023/09/s-outside-Laughs-.jpg",
-        "location": "5220 Roosevelt Way NE, Seattle, WA 98105"
+      "creator": "Danny",
+      "description": "I'll bring the tomatoes.",
+      "image": "https://laughscomedyclub.com/wp-content/uploads/2023/09/s-outside-Laughs-.jpg",
+      "location": "5220 Roosevelt Way NE, Seattle, WA 98105",
+      "title": "Comedy Club"
     },
     {
-        "title": "Legos All Day Long",
-        "description": "You can get one too...",
-        "image": "https://i.ebayimg.com/images/g/JaYAAOSw31VlFdPD/s-l400.jpg",
-        "location": "Home"
+      "creator": "Danny",
+      "description": "You can get one too...",
+      "image": "https://i.ebayimg.com/images/g/JaYAAOSw31VlFdPD/s-l400.jpg",
+      "location": "Home",
+      "title": "Legos All Day Long"
     },
     {
-        "title": "Sleepless in Seattle/Themed Movie Night",
-        "description": "We're not making it out of the couch.",
-        "image": "https://storage.googleapis.com/loveable.appspot.com/blog/uploads/2024/07/30095011/use-projector.jpg",
-        "location": "2466 Westlake Ave N, Seattle, WA 98109"
+      "creator": "Danny",
+      "description": "We're not making it out of the couch.",
+      "image": "https://storage.googleapis.com/loveable.appspot.com/blog/uploads/2024/07/30095011/use-projector.jpg",
+      "location": "2466 Westlake Ave N, Seattle, WA 98109",
+      "title": "Sleepless in Seattle/Themed Movie Night"
     },
     {
-        "title": "Bob Ross",
-        "description": "Just think of the happy little trees.",
-        "image": "https://www.aaronreedphotography.com/images/xl/Bob-Ross-Portrait.jpg",
-        "location": "Home"
+      "creator": "Danny",
+      "description": "Just think of the happy little trees.",
+      "image": "https://www.aaronreedphotography.com/images/xl/Bob-Ross-Portrait.jpg",
+      "location": "Home",
+      "title": "Bob Ross"
     },
     {
-        "title": "Skyline Lake Trail",
-        "description": "Almost as beautiful as you.",
-        "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSrjKmTxrTKnWIHcXp2sJGLGNflgxG-cTVglQ&s",
-        "location": "Skyline Lake Trail, Leavenworth, WA 98826"
+      "creator": "Danny",
+      "description": "Almost as beautiful as you.",
+      "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSrjKmTxrTKnWIHcXp2sJGLGNflgxG-cTVglQ&s",
+      "location": "Skyline Lake Trail, Leavenworth, WA 98826",
+      "title": "Skyline Lake Trail"
     },
     {
-        "title": "Washington Park Arboretum",
-        "description": "Five bucks if you jump in.",
-        "image": "https://botanicgardens.uw.edu/wp-content/uploads/sites/7/2015/03/090625_3359.jpg",
-        "location": "2300 Arboretum Dr E, Seattle, WA 98112"
+      "creator": "Danny",
+      "description": "Five bucks if you jump in.",
+      "image": "https://botanicgardens.uw.edu/wp-content/uploads/sites/7/2015/03/090625_3359.jpg",
+      "location": "2300 Arboretum Dr E, Seattle, WA 98112",
+      "title": "Washington Park Arboretum"
     }
-]
+  ]

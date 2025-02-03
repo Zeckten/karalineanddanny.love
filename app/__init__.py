@@ -6,8 +6,9 @@ from flask_migrate import Migrate
 from nylas import Client
 from app.config import Config
 from app.models import *
+from app.clear_tables import auto_migrate_database
 from app.load_data import load
-
+import os
 
 login_manager = LoginManager()
 migrate = Migrate()
@@ -25,6 +26,7 @@ def create_app():
     # Import all models to ensure they're registered
     with app.app_context():
         db.create_all()
+        # auto_migrate_database(app, db)  # Automatically migrate database schema if differences are detected
     
     login_manager.init_app(app)
     login_manager.login_view = 'auth.login'
@@ -60,7 +62,7 @@ def create_app():
 
     login_manager.user_loader(load_user)
 
-    with app.app_context():
-        load(db)
+    #with app.app_context():
+        #load(db)
 
     return app

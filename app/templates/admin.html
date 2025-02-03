@@ -29,10 +29,6 @@
     .admin-table tr:hover {
         background-color: #f5f5f5;
     }
-    .admin-table .actions {
-        display: flex;
-        gap: 10px;
-    }
 </style>
 {% endblock %}
 
@@ -53,6 +49,10 @@
         <h2>Users</h2>
         <a href="{{ url_for('admin.edit_user') }}" class="btn btn-success mb-3">Add User</a>
         <a href="{{ url_for('admin.download_users') }}" class="btn btn-info mb-3">Download Users JSON</a>
+        <button onclick="clearTable('users')" class="btn btn-warning mb-3">Clear Users Table</button>
+        <button onclick="resetTable('users')" class="btn btn-danger mb-3">Reset Users Table</button>
+        <button onclick="loadFromJson('users')" class="btn btn-info mb-3">Load Users from JSON</button>
+        <!-- <button onclick="dropTable('users')" class="btn btn-danger mb-3">Drop Users Table</button> -->
         <table class="admin-table">
             <thead>
                 <tr>
@@ -83,6 +83,10 @@
         <h2>Coupons</h2>
         <a href="{{ url_for('admin.edit_coupon') }}" class="btn btn-success mb-3">Add Coupon</a>
         <a href="{{ url_for('admin.download_coupons') }}" class="btn btn-info mb-3">Download Coupons JSON</a>
+        <button onclick="clearTable('coupons')" class="btn btn-warning mb-3">Clear Coupons Table</button>
+        <button onclick="resetTable('coupons')" class="btn btn-danger mb-3">Reset Coupons Table</button>
+        <button onclick="loadFromJson('coupons')" class="btn btn-info mb-3">Load Coupons from JSON</button>
+        <!-- <button onclick="dropTable('coupons')" class="btn btn-danger mb-3">Drop Coupons Table</button> -->
         <table class="admin-table">
             <thead>
                 <tr>
@@ -91,6 +95,7 @@
                     <th>Description</th>
                     <th>Image</th>
                     <th>Redeemed</th>
+                    <th>Creator</th>
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -102,6 +107,7 @@
                     <td>{{ coupon.description }}</td>
                     <td><img src="{{ coupon.image }}" alt="{{ coupon.title }}" style="width: 50px; height: auto;"></td>
                     <td>{{ coupon.redeemed }}</td>
+                    <td>{{ coupon.creator }}</td>
                     <td class="actions">
                         <a href="{{ url_for('admin.edit_coupon', id=coupon.id) }}" class="btn btn-primary btn-sm">Edit</a>
                     </td>
@@ -115,6 +121,10 @@
         <h2>Date Ideas</h2>
         <a href="{{ url_for('admin.edit_date_idea') }}" class="btn btn-success mb-3">Add Date Idea</a>
         <a href="{{ url_for('admin.download_date_ideas') }}" class="btn btn-info mb-3">Download Date Ideas JSON</a>
+        <button onclick="clearTable('dates')" class="btn btn-warning mb-3">Clear Date Ideas Table</button>
+        <button onclick="resetTable('dates')" class="btn btn-danger mb-3">Reset Date Ideas Table</button>
+        <button onclick="loadFromJson('dates')" class="btn btn-info mb-3">Load Date Ideas from JSON</button>
+        <!-- <button onclick="dropTable('dates')" class="btn btn-danger mb-3">Drop Date Ideas Table</button> -->
         <table class="admin-table">
             <thead>
                 <tr>
@@ -123,6 +133,7 @@
                     <th>Description</th>
                     <th>Image</th>
                     <th>Location</th>
+                    <th>Creator</th>
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -134,6 +145,7 @@
                     <td>{{ date_idea.description }}</td>
                     <td><img src="{{ date_idea.image }}" alt="{{ date_idea.title }}" style="width: 50px; height: auto;"></td>
                     <td>{{ date_idea.location }}</td>
+                    <td>{{ date_idea.creator }}</td>
                     <td class="actions">
                         <a href="{{ url_for('admin.edit_date_idea', id=date_idea.id) }}" class="btn btn-primary btn-sm">Edit</a>
                     </td>
@@ -153,7 +165,68 @@
         document.getElementById(selectedTable).style.display = 'block';
     }
 
-    // Display the slider view by default
+    function clearTable(tableName) {
+        if (confirm(`Are you sure you want to clear the ${tableName} table?`)) {
+            fetch(`/admin/clear/${tableName}`, { method: 'POST' })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert(`${tableName} table cleared successfully.`);
+                        location.reload();
+                    } else {
+                        alert(`Failed to clear ${tableName} table.`);
+                    }
+                });
+        }
+    }
+
+    function resetTable(tableName) {
+        if (confirm(`Are you sure you want to reset the ${tableName} table? This will drop and recreate the table.`)) {
+            fetch(`/admin/reset/${tableName}`, { method: 'POST' })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert(`${tableName} table reset successfully.`);
+                        location.reload();
+                    } else {
+                        alert(`Failed to reset ${tableName} table.`);
+                    }
+                });
+        }
+    }
+
+    function loadFromJson(tableName) {
+        const fileInput = document.createElement('input');
+        fileInput.type = 'file';
+        fileInput.accept = '.json';
+        fileInput.onchange = () => {
+            const file = fileInput.files[0];
+            const reader = new FileReader();
+            reader.onload = () => {
+                const data = JSON.parse(reader.result);
+                fetch(`/admin/load/${tableName}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert(`${tableName} table loaded from JSON successfully.`);
+                        location.reload();
+                    } else {
+                        alert(`Failed to load ${tableName} table from JSON.`);
+                    }
+                });
+            };
+            reader.readAsText(file);
+        };
+        fileInput.click();
+    }
+
+    // Display the users table by default
     document.getElementById('usersTable').style.display = 'block';
 </script>
 {% endblock %}

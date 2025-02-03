@@ -204,7 +204,8 @@ def add_date_idea():
         description = request.json['description']
         image = request.json['image']
         location = request.json['location']
-        new_date_idea = DateIdea(title=title, description=description, image=image, location=location)
+        creator = current_user.username  # Set creator
+        new_date_idea = DateIdea(title=title, description=description, image=image, location=location, creator=creator)
         try:
             db.session.add(new_date_idea)
             db.session.commit()
@@ -221,7 +222,8 @@ def add_coupon():
         title = request.json['title']
         description = request.json['description']
         image = request.json['image']
-        new_coupon = Coupon(title=title, description=description, image=image)
+        creator = current_user.username  # Set creator
+        new_coupon = Coupon(title=title, description=description, image=image, creator=creator)
         try:
             db.session.add(new_coupon)
             db.session.commit()

@@ -1,62 +1,72 @@
 [
     {
-        "title": "100 Kisses",
-        "description": "Must be redeemed all at once.",
-        "image": "https://pngimg.com/d/kiss_PNG85751.png",
-        "redeemed": false
+      "creator": "Karaline",
+      "description": "Must be redeemed all at once.",
+      "image": "https://pngimg.com/d/kiss_PNG85751.png",
+      "redeemed": false,
+      "title": "100 Kisses"
     },
     {
-        "title": "Shrimp Alfredo",
-        "description": "Just the way you like it.",
-        "image": "https://www.tasteofhome.com/wp-content/uploads/2018/01/Shrimp-Alfredo_EXPS_FT24_30092_JR_0208_1.jpg",
-        "redeemed": false
+      "creator": "Karaline",
+      "description": "Just the way you like it.",
+      "image": "https://www.tasteofhome.com/wp-content/uploads/2018/01/Shrimp-Alfredo_EXPS_FT24_30092_JR_0208_1.jpg",
+      "redeemed": false,
+      "title": "Shrimp Alfredo"
     },
     {
-        "title": "30 Minute Massage",
-        "description": "I'll warm my hands up first.",
-        "image": "https://static.wixstatic.com/media/80e9b2_3dec75181f4042369de93691186e3154~mv2.png",
-        "redeemed": false
+      "creator": "Karaline",
+      "description": "I'll warm my hands up first.",
+      "image": "https://static.wixstatic.com/media/80e9b2_3dec75181f4042369de93691186e3154~mv2.png",
+      "redeemed": false,
+      "title": "30 Minute Massage"
     },
     {
-        "title": "Unlimited Movie Dates",
-        "description": "One month of Regal Unlimited, AMC A-List, or other movie theater subscription.",
-        "image": "/static/images/Regal_Cinemas_logo_2018.png",
-        "redeemed": false
+      "creator": "Karaline",
+      "description": "One month of Regal Unlimited, AMC A-List, or other movie theater subscription.",
+      "image": "https://assets.simon.com/tenantlogos/4805.png",
+      "redeemed": false,
+      "title": "Unlimited Movie Dates"
     },
     {
-        "title": "Housekeeping",
-        "description": "Just say the word and your room will be spotless.",
-        "image": "https://assets1.hospitalitytech.com/images/v/max_width_1440/2022-05/shutterstock_1628546512.jpg",
-        "redeemed": false
+      "creator": "Karaline",
+      "description": "Just say the word and your room will be spotless.",
+      "image": "https://assets1.hospitalitytech.com/images/v/max_width_1440/2022-05/shutterstock_1628546512.jpg",
+      "redeemed": false,
+      "title": "Housekeeping"
     },
     {
-        "title": "Sweet Treat",
-        "description": "I will fetch whatever sweet treat you desire, whenever, wherever.",
-        "image": "https://www.cookingclassy.com/wp-content/uploads/2020/02/soft-sugar-cookies-5.jpg",
-        "redeemed": false
+      "creator": "Karaline",
+      "description": "I will fetch whatever sweet treat you desire, whenever, wherever.",
+      "image": "https://www.cookingclassy.com/wp-content/uploads/2020/02/soft-sugar-cookies-5.jpg",
+      "redeemed": false,
+      "title": "Sweet Treat"
     },
     {
-        "title": "Fresh Wheels",
-        "description": "Washed and detailed.",
-        "image": "https://blog.mobilecarwash.com/wp-content/uploads/2020/02/autodetailing.jpg",
-        "redeemed": false
+      "creator": "Karaline",
+      "description": "Washed and detailed.",
+      "image": "https://blog.mobilecarwash.com/wp-content/uploads/2020/02/autodetailing.jpg",
+      "redeemed": false,
+      "title": "Fresh Wheels"
     },
     {
-        "title": "Emergency Bouquet",
-        "description": "I will go out of my way to get you flowers as soon as possible.",
-        "image": "https://asset.bloomnation.com/c_pad,d_vendor:global:catalog:product:image.png,f_auto,fl_preserve_transparency,q_auto/v1714538835/vendor/4647/catalog/product/2/0/20170331045302_file_58dde0ae63b3f.jpg",
-        "redeemed": false
+      "creator": "Karaline",
+      "description": "I will go out of my way to get you flowers as soon as possible.",
+      "image": "https://asset.bloomnation.com/c_pad,d_vendor:global:catalog:product:image.png,f_auto,fl_preserve_transparency,q_auto/v1714538835/vendor/4647/catalog/product/2/0/20170331045302_file_58dde0ae63b3f.jpg",
+      "redeemed": false,
+      "title": "Emergency Bouquet"
     },
     {
-        "title": "Snack Attack",
-        "description": "Drop everything. Immediate snack run.",
-        "image": "https://magazine.washington.edu/columns_wordpress/wp-content/uploads/2021/02/dicks2k.jpg",
-        "redeemed": false
+      "creator": "Karaline",
+      "description": "Drop everything. Immediate snack run.",
+      "image": "https://magazine.washington.edu/columns_wordpress/wp-content/uploads/2021/02/dicks2k.jpg",
+      "redeemed": false,
+      "title": "Snack Attack"
     },
     {
-        "title": "The Prettiest Girl",
-        "description": "A new dress, makeup, or anything that makes you feel beautiful.",
-        "image": "https://hips.hearstapps.com/hmg-prod/images/beauty-1559602562.png",
-        "redeemed": false
+      "creator": "Karaline",
+      "description": "A new dress, makeup, or anything that makes you feel beautiful.",
+      "image": "https://hips.hearstapps.com/hmg-prod/images/beauty-1559602562.png",
+      "redeemed": false,
+      "title": "The Prettiest Girl"
     }
-]
+  ]

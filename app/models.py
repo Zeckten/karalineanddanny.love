@@ -19,10 +19,11 @@ class User(db.Model, UserMixin):
 
 class Coupon(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(255), nullable=False, unique=True)
+    title = db.Column(db.String(255), nullable=False, unique=False)
     description = db.Column(db.Text, nullable=False)
     image = db.Column(db.String(255), nullable=False)
     redeemed = db.Column(db.Boolean, default=False)
+    creator = db.Column(db.String(100), nullable=True)
 
     def to_dict(self):
         return {
@@ -39,6 +40,7 @@ class DateIdea(db.Model):
     description = db.Column(db.Text, nullable=False)
     image = db.Column(db.String(255), nullable=False)
     location = db.Column(db.String(255), nullable=False)
+    creator = db.Column(db.String(100), nullable=True)
 
     def to_dict(self):
         return {

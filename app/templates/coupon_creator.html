@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}Coupons{% endblock %}
+{% block title %}My Coupons{% endblock %}
 
 {% block head %}
 <style>
@@ -126,7 +126,7 @@
 
 {% block content %}
 <div class="container">
-    <h1 class="text-center" style="padding: 20px;">Coupons</h1>
+    <h1 class="text-center" style="padding: 20px;">My Coupons</h1>
     <div class="slider" id="sliderView">
         <div class="slides" id="slides"></div>
         <div class="navigation mt-3">
@@ -161,7 +161,7 @@
                 const slidesContainer = document.getElementById('slides');
                 const gridContainer = document.getElementById('gridView');
                 data.forEach(coupon => {
-                    if (coupon.creator !== '{{ current_user.username }}') {
+                    if (coupon.creator === '{{ current_user.username }}') {
                         const slide = document.createElement('div');
                         slide.className = 'slide coupon' + (coupon.redeemed ? ' redeemed' : '');
                         slide.innerHTML = `
