@@ -15,6 +15,7 @@
             margin: 0;
             font-family: 'Arial', sans-serif;
             overflow: hidden;
+            flex-direction: column;
         }
         .content {
             text-align: center;
@@ -42,11 +43,32 @@
                 opacity: 0;
             }
         }
+        .buttons {
+            margin-top: 20px;
+            z-index: 1;
+        }
+        .buttons button {
+            padding: 10px 20px;
+            margin: 5px;
+            font-size: 1.5rem;
+            color: #fff;
+            background-color: #ff0066;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .buttons button:hover {
+            background-color: #ff3399;
+        }
     </style>
 </head>
 <body>
     <div class="content">
         Be My Valentine?
+    </div>
+    <div class="buttons">
+        <button onclick="alert('Yay!')">Yes</button>
+        <button onclick="alert('Yippee!!')">Yes!!</button>
     </div>
     <script>
         const flowerImages = [
@@ -67,8 +89,8 @@
             '/static/images/Pixel%20Art%20Flower%20Pack/Flower%204/Flower%204%20-%20PURPLE.png',
             '/static/images/Pixel%20Art%20Flower%20Pack/Flower%204/Flower%204%20-%20TEAL.png',
             '/static/images/Pixel%20Art%20Flower%20Pack/Flower%205/Flower%205%20-%20BLUE.png',
-            '/static/images/Pixel%20Art%20Flower%20Pack/Flower%205/Flower%205%20-%20RED.png',
-            '/static/images/Pixel%20Art%20Flower%20Pack/Flower%205/Flower%205%20-%20YELLOW.png',
+            '/static/images/Pixel%20Art%20Flower%205/Flower%205%20-%20RED.png',
+            '/static/images/Pixel%20Art%20Flower%205/Flower%205%20-%20YELLOW.png',
             '/static/images/Pixel%20Art%20Flower%20Pack/Flower%206/Flower%206%20-%20MAGENTA.png',
             '/static/images/Pixel%20Art%20Flower%20Pack/Flower%206/Flower%206%20-%20PINK.png',
             '/static/images/Pixel%20Art%20Flower%20Pack/Flower%206/Flower%206%20-%20PURPLE.png',
@@ -89,7 +111,7 @@
             '/static/images/Pixel%20Art%20Flower%20Pack/Flower%2010/Flower%2010%20-%20TEAL.png',
             '/static/images/Pixel%20Art%20Flower%20Pack/Flower%2011/Flower%2011%20-%20BLUE.png',
             '/static/images/Pixel%20Art%20Flower%20Pack/Flower%2011/Flower%2011%20-%20RED.png',
-            '/static/images/Pixel%20Art%20Flower%20Pack/Flower%2011/Flower%2011%20-%20YELLOW.png',
+            '/static/images/Pixel%20Art%20Flower%2011/Flower%2011%20-%20YELLOW.png',
             '/static/images/Pixel%20Art%20Flower%20Pack/Flower%2012/Flower%2012%20-%20MAGENTA.png',
             '/static/images/Pixel%20Art%20Flower%20Pack/Flower%2012/Flower%2012%20-%20PINK.png',
             '/static/images/Pixel%20Art%20Flower%20Pack/Flower%2012/Flower%2012%20-%20PURPLE.png',
@@ -113,7 +135,7 @@
             }, 10000); // Remove the flower after 10 seconds
         }
 
-        setInterval(createFlower, 100); // Create a new flower every 500ms
+        setInterval(createFlower, 100); // Create a new flower every 100ms
     </script>
 </body>
 </html>
