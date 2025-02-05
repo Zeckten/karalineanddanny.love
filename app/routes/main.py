@@ -1,9 +1,10 @@
-from flask import Blueprint, render_template, redirect, url_for, flash, current_app, session
+from flask import Blueprint, render_template, redirect, url_for, flash, current_app, session, jsonify
 from flask_login import login_required, current_user
 from werkzeug.security import check_password_hash, generate_password_hash
 from app.forms import ChangePasswordForm
 from app.models import User, DateIdea, Coupon, db
 import logging
+import os
 
 main = Blueprint('main', __name__, url_prefix='/')
 
@@ -62,3 +63,19 @@ def account():
             flash('Current password is incorrect.', 'danger')
 
     return render_template('account.html', title='Account', user=current_user, nylas_email=nylas_email, form=form)
+
+@main.route("/bemine")
+@login_required
+def bemine():
+    return render_template('bemine.html')
+
+@main.route("/flower_images")
+@login_required
+def flower_images():
+    flower_folder = os.path.join(current_app.static_folder, 'images/Pixel Art Flower Pack')
+    flower_images = []
+    for root, dirs, files in os.walk(flower_folder):
+        for file in files:
+            if file.endswith(('png', 'jpg', 'jpeg', 'gif')):
+                flower_images.append(os.path.join(root, file).replace(current_app.static_folder, ''))
+    return jsonify(flower_images)

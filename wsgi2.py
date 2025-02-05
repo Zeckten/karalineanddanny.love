@@ -1,4 +1,4 @@
-from wsgi2 import serve
+from waitress import serve
 from app import create_app
 
 app = create_app()

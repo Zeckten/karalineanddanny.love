@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Be My Valentine?</title>
+    <style>
+        body {
+            background-image: url('https://www.transparenttextures.com/patterns/gray-floral.png');
+            background-color: #ffcccc;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: 'Arial', sans-serif;
+            overflow: hidden;
+        }
+        .content {
+            text-align: center;
+            color: #ff0066;
+            font-size: 3rem;
+            font-weight: bold;
+            text-shadow: 2px 2px #ff99cc;
+            z-index: 1;
+        }
+        .flower {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            background-size: contain;
+            background-repeat: no-repeat;
+            animation: fall linear infinite;
+        }
+        @keyframes fall {
+            0% {
+                transform: translateY(-100vh);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="content">
+        Be My Valentine?
+    </div>
+    <script>
+        const flowerImages = [
+            '/static/images/Pixel%20Art%20Flower%20Pack/Flower%201/Flower%201%20-%20BLUE.png',
+            '/static/images/Pixel%20Art%20Flower%20Pack/Flower%201/Flower%201%20-%20COLORFUL.png',
+            '/static/images/Pixel%20Art%20Flower%20Pack/Flower%201/Flower%201%20-%20RED.png',
+            '/static/images/Pixel%20Art%20Flower%20Pack/Flower%201/Flower%201%20-%20TEAL.png',
+            '/static/images/Pixel%20Art%20Flower%20Pack/Flower%201/Flower%201%20-%20YELLOW.png',
+            '/static/images/Pixel%20Art%20Flower%20Pack/Flower%202/Flower%202%20-%20MAGENTA.png',
+            '/static/images/Pixel%20Art%20Flower%20Pack/Flower%202/Flower%202%20-%20PINK.png',
+            '/static/images/Pixel%20Art%20Flower%20Pack/Flower%202/Flower%202%20-%20PURPLE.png',
+            '/static/images/Pixel%20Art%20Flower%20Pack/Flower%202/Flower%202%20-%20TEAL.png',
+            '/static/images/Pixel%20Art%20Flower%20Pack/Flower%203/Flower%203%20-%20BLUE.png',
+            '/static/images/Pixel%20Art%20Flower%20Pack/Flower%203/Flower%203%20-%20RED.png',
+            '/static/images/Pixel%20Art%20Flower%20Pack/Flower%203/Flower%203%20-%20YELLOW.png',
+            '/static/images/Pixel%20Art%20Flower%20Pack/Flower%204/Flower%204%20-%20MAGENTA.png',
+            '/static/images/Pixel%20Art%20Flower%20Pack/Flower%204/Flower%204%20-%20PINK.png',
+            '/static/images/Pixel%20Art%20Flower%20Pack/Flower%204/Flower%204%20-%20PURPLE.png',
+            '/static/images/Pixel%20Art%20Flower%20Pack/Flower%204/Flower%204%20-%20TEAL.png',
+            '/static/images/Pixel%20Art%20Flower%20Pack/Flower%205/Flower%205%20-%20BLUE.png',
+            '/static/images/Pixel%20Art%20Flower%20Pack/Flower%205/Flower%205%20-%20RED.png',
+            '/static/images/Pixel%20Art%20Flower%20Pack/Flower%205/Flower%205%20-%20YELLOW.png',
+            '/static/images/Pixel%20Art%20Flower%20Pack/Flower%206/Flower%206%20-%20MAGENTA.png',
+            '/static/images/Pixel%20Art%20Flower%20Pack/Flower%206/Flower%206%20-%20PINK.png',
+            '/static/images/Pixel%20Art%20Flower%20Pack/Flower%206/Flower%206%20-%20PURPLE.png',
+            '/static/images/Pixel%20Art%20Flower%20Pack/Flower%206/Flower%206%20-%20TEAL.png',
+            '/static/images/Pixel%20Art%20Flower%20Pack/Flower%207/Flower%207%20-%20BLUE.png',
+            '/static/images/Pixel%20Art%20Flower%20Pack/Flower%207/Flower%207%20-%20RED.png',
+            '/static/images/Pixel%20Art%20Flower%20Pack/Flower%207/Flower%207%20-%20YELLOW.png',
+            '/static/images/Pixel%20Art%20Flower%20Pack/Flower%208/Flower%208%20-%20MAGENTA.png',
+            '/static/images/Pixel%20Art%20Flower%20Pack/Flower%208/Flower%208%20-%20PINK.png',
+            '/static/images/Pixel%20Art%20Flower%20Pack/Flower%208/Flower%208%20-%20PURPLE.png',
+            '/static/images/Pixel%20Art%20Flower%20Pack/Flower%208/Flower%208%20-%20TEAL.png',
+            '/static/images/Pixel%20Art%20Flower%20Pack/Flower%209/Flower%209%20-%20BLUE.png',
+            '/static/images/Pixel%20Art%20Flower%20Pack/Flower%209/Flower%209%20-%20RED.png',
+            '/static/images/Pixel%20Art%20Flower%20Pack/Flower%209/Flower%209%20-%20YELLOW.png',
+            '/static/images/Pixel%20Art%20Flower%20Pack/Flower%2010/Flower%2010%20-%20MAGENTA.png',
+            '/static/images/Pixel%20Art%20Flower%20Pack/Flower%2010/Flower%2010%20-%20PINK.png',
+            '/static/images/Pixel%20Art%20Flower%20Pack/Flower%2010/Flower%2010%20-%20PURPLE.png',
+            '/static/images/Pixel%20Art%20Flower%20Pack/Flower%2010/Flower%2010%20-%20TEAL.png',
+            '/static/images/Pixel%20Art%20Flower%20Pack/Flower%2011/Flower%2011%20-%20BLUE.png',
+            '/static/images/Pixel%20Art%20Flower%20Pack/Flower%2011/Flower%2011%20-%20RED.png',
+            '/static/images/Pixel%20Art%20Flower%20Pack/Flower%2011/Flower%2011%20-%20YELLOW.png',
+            '/static/images/Pixel%20Art%20Flower%20Pack/Flower%2012/Flower%2012%20-%20MAGENTA.png',
+            '/static/images/Pixel%20Art%20Flower%20Pack/Flower%2012/Flower%2012%20-%20PINK.png',
+            '/static/images/Pixel%20Art%20Flower%20Pack/Flower%2012/Flower%2012%20-%20PURPLE.png',
+            '/static/images/Pixel%20Art%20Flower%20Pack/Flower%2012/Flower%2012%20-%20TEAL.png',
+            '/static/images/Pixel%20Art%20Flower%20Pack/Flower%2013/Flower%2013%20-%20BLUE.png',
+            '/static/images/Pixel%20Art%20Flower%20Pack/Flower%2013/Flower%2013%20-%20RED.png',
+            '/static/images/Pixel%20Art%20Flower%20Pack/Flower%2013/Flower%2013%20-%20YELLOW.png'
+        ];
+
+        function createFlower() {
+            const flower = document.createElement('div');
+            flower.className = 'flower';
+            flower.style.left = Math.random() * 100 + 'vw';
+            flower.style.animationDuration = Math.random() * 5 + 5 + 's';
+            const imageUrl = flowerImages[Math.floor(Math.random() * flowerImages.length)];
+            flower.style.backgroundImage = `url(${imageUrl})`;
+            document.body.appendChild(flower);
+            console.log('Flower created with image:', imageUrl); // Log the image URL
+            setTimeout(() => {
+                flower.remove();
+            }, 10000); // Remove the flower after 10 seconds
+        }
+
+        setInterval(createFlower, 100); // Create a new flower every 500ms
+    </script>
+</body>
+</html>
