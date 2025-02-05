@@ -70,7 +70,6 @@ def bemine():
     return render_template('bemine.html')
 
 @main.route("/flower_images")
-@login_required
 def flower_images():
     flower_folder = os.path.join(current_app.static_folder, 'images/Pixel Art Flower Pack')
     flower_images = []
