@@ -65,7 +65,6 @@ def account():
     return render_template('account.html', title='Account', user=current_user, nylas_email=nylas_email, form=form)
 
 @main.route("/bemine")
-@login_required
 def bemine():
     return render_template('bemine.html')
 
