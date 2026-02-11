@@ -22,6 +22,10 @@
             <label for="location">Location</label>
             <input type="text" class="form-control" id="location" name="location" value="{{ date_idea.location if date_idea else '' }}" required>
         </div>
+        <div class="form-group">
+            <label for="creator">Creator</label>
+            <input type="text" class="form-control" id="creator" name="creator" value="{{ date_idea.creator if date_idea else '' }}" placeholder="Username of creator">
+        </div>
         <button type="submit" class="btn btn-primary mt-3">{% if date_idea %}Save Changes{% else %}Add Date Idea{% endif %}</button>
     </form>
 </div>

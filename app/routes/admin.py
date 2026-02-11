@@ -37,14 +37,16 @@ def edit_user(id=None):
             user.email = request.form['email']
             if request.form['password']:
                 user.password = generate_password_hash(request.form['password'])
+            user.nylas_grant_id = request.form.get('nylas_grant_id') or None
             user.admin = 'admin' in request.form
         else:
             username = request.form['username']
             email = request.form['email']
             password = request.form['password']
             hashed_password = generate_password_hash(password)
+            nylas_grant_id = request.form.get('nylas_grant_id') or None
             admin = 'admin' in request.form
-            user = User(username=username, email=email, password=hashed_password, admin=admin)
+            user = User(username=username, email=email, password=hashed_password, nylas_grant_id=nylas_grant_id, admin=admin)
             db.session.add(user)
         db.session.commit()
         flash('User saved successfully', 'success')
@@ -62,13 +64,13 @@ def edit_coupon(id=None):
             coupon.title = request.form['title']
             coupon.description = request.form['description']
             coupon.image = request.form['image']
+            coupon.creator = request.form.get('creator') or current_user.username
             coupon.redeemed = 'redeemed' in request.form
-            coupon.creator = coupon.creator or current_user.username  # Autopopulate creator if None
         else:
             title = request.form['title']
             description = request.form['description']
             image = request.form['image']
-            creator = current_user.username  # Set creator
+            creator = request.form.get('creator') or current_user.username
             coupon = Coupon(title=title, description=description, image=image, creator=creator)
             db.session.add(coupon)
         db.session.commit()
@@ -88,13 +90,13 @@ def edit_date_idea(id=None):
             date_idea.description = request.form['description']
             date_idea.image = request.form['image']
             date_idea.location = request.form['location']
-            date_idea.creator = date_idea.creator or current_user.username  # Autopopulate creator if None
+            date_idea.creator = request.form.get('creator') or current_user.username
         else:
             title = request.form['title']
             description = request.form['description']
             image = request.form['image']
             location = request.form['location']
-            creator = current_user.username  # Set creator
+            creator = request.form.get('creator') or current_user.username
             date_idea = DateIdea(title=title, description=description, image=image, location=location, creator=creator)
             db.session.add(date_idea)
         db.session.commit()
