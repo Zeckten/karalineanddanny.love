@@ -189,6 +189,23 @@ def redeem_coupon(id):
 
     return jsonify({'message': 'Coupon redeemed successfully'})
 
+@api.route("/coupons/<int:id>/unredeem", methods=["POST"])
+@login_required
+def unredeem_coupon(id):
+    coupon = Coupon.query.get_or_404(id)
+
+    # Only allow unreedeeming your own coupons
+    if coupon.creator != current_user.username:
+        return jsonify({'message': 'You can only renew your own coupons'}), 403
+
+    if not coupon.redeemed:
+        return jsonify({'message': 'Coupon is not redeemed'}), 400
+
+    coupon.redeemed = False
+    db.session.commit()
+
+    return jsonify({'message': 'Coupon renewed successfully'})
+
 @api.route("/dates", methods=["GET"])
 @login_required
 def get_date_ideas():

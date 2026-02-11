@@ -127,6 +127,19 @@
 {% block content %}
 <div class="container">
     <h1 class="text-center" style="padding: 20px;">Coupons</h1>
+
+    <!-- Filter Controls -->
+    <div class="text-center mb-3">
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="checkbox" id="showMyCoupons" onchange="filterCoupons()">
+            <label class="form-check-label" for="showMyCoupons">Show My Coupons</label>
+        </div>
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="checkbox" id="hideRedeemed" onchange="filterCoupons()">
+            <label class="form-check-label" for="hideRedeemed">Hide Redeemed</label>
+        </div>
+    </div>
+
     <div class="slider" id="sliderView">
         <div class="slides" id="slides"></div>
         <div class="navigation mt-3">
@@ -147,6 +160,9 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
 <script>
+    let allCoupons = [];
+    const currentUsername = '{{ current_user.username }}';
+
     document.addEventListener('DOMContentLoaded', function() {
         console.log('DOM fully loaded and parsed');
         fetch('{{ url_for("api.get_coupons") }}')
@@ -158,50 +174,92 @@
             })
             .then(data => {
                 console.log('Coupons data:', data);
-                const slidesContainer = document.getElementById('slides');
-                const gridContainer = document.getElementById('gridView');
-                data.forEach(coupon => {
-                    if (coupon.creator !== '{{ current_user.username }}') {
-                        const slide = document.createElement('div');
-                        slide.className = 'slide coupon' + (coupon.redeemed ? ' redeemed' : '');
-                        slide.innerHTML = `
-                            <img src="${coupon.image}" alt="${coupon.title}">
-                            <div class="text">
-                                <h2>${coupon.title}</h2>
-                                <p>${coupon.description}</p>
-                                ${!coupon.redeemed ? `<button class="btn btn-primary" onclick="redeemCoupon(${coupon.id})">Redeem</button>` : '<button class="btn btn-secondary" disabled>Redeemed</button>'}
-                            </div>
-                        `;
-                        slidesContainer.appendChild(slide);
-
-                        const gridItem = document.createElement('div');
-                        gridItem.className = 'grid-item coupon' + (coupon.redeemed ? ' redeemed' : '');
-                        gridItem.innerHTML = `
-                            <div class="grid-item-container">
-                                <div class="grid-item-content">
-                                    <img src="${coupon.image}" alt="${coupon.title}">
-                                    <div class="text">
-                                        <h2>${coupon.title}</h2>
-                                        <p>${coupon.description}</p>
-                                        ${!coupon.redeemed ? `<button class="btn btn-primary" onclick="redeemCoupon(${coupon.id})">Redeem</button>` : '<button class="btn btn-secondary" disabled>Redeemed</button>'}
-                                    </div>
-                                </div>
-                            </div>
-                        `;
-                        gridContainer.appendChild(gridItem);
-                    }
-                });
-
-                // Update totalSlides after slides are added
-                totalSlides = document.querySelectorAll('.slide').length;
-                console.log('Total slides:', totalSlides);
-                updateSlidePosition();
+                allCoupons = data;
+                renderCoupons();
 
                 // Display the slider view by default
                 toggleView('slider');
             })
             .catch(error => console.error('Error loading coupons:', error));
     });
+
+    function renderCoupons() {
+        const slidesContainer = document.getElementById('slides');
+        const gridContainer = document.getElementById('gridView');
+
+        // Clear existing content
+        slidesContainer.innerHTML = '';
+        gridContainer.innerHTML = '';
+
+        const showMyCoupons = document.getElementById('showMyCoupons').checked;
+        const hideRedeemed = document.getElementById('hideRedeemed').checked;
+
+        allCoupons.forEach(coupon => {
+            const isMyCoupon = coupon.creator === currentUsername;
+
+            // Apply filters
+            if (!showMyCoupons && isMyCoupon) return;
+            if (hideRedeemed && coupon.redeemed) return;
+
+            // Determine button text and action
+            let buttonHtml;
+            if (isMyCoupon) {
+                // My coupon - show Renew button if redeemed, or info that it's mine
+                if (coupon.redeemed) {
+                    buttonHtml = `<button class="btn btn-success" onclick="renewCoupon(${coupon.id})">Renew</button>`;
+                } else {
+                    buttonHtml = `<span class="badge badge-info">Your Coupon</span>`;
+                }
+            } else {
+                // Other's coupon - show Redeem button or Redeemed status
+                if (coupon.redeemed) {
+                    buttonHtml = '<button class="btn btn-secondary" disabled>Redeemed</button>';
+                } else {
+                    buttonHtml = `<button class="btn btn-primary" onclick="redeemCoupon(${coupon.id})">Redeem</button>`;
+                }
+            }
+
+            const slide = document.createElement('div');
+            slide.className = 'slide coupon' + (coupon.redeemed ? ' redeemed' : '');
+            slide.innerHTML = `
+                <img src="${coupon.image}" alt="${coupon.title}">
+                <div class="text">
+                    <h2>${coupon.title}</h2>
+                    <p>${coupon.description}</p>
+                    ${isMyCoupon ? '<small class="text-muted">Created by you</small><br>' : ''}
+                    ${buttonHtml}
+                </div>
+            `;
+            slidesContainer.appendChild(slide);
+
+            const gridItem = document.createElement('div');
+            gridItem.className = 'grid-item coupon' + (coupon.redeemed ? ' redeemed' : '');
+            gridItem.innerHTML = `
+                <div class="grid-item-container">
+                    <div class="grid-item-content">
+                        <img src="${coupon.image}" alt="${coupon.title}">
+                        <div class="text">
+                            <h2>${coupon.title}</h2>
+                            <p>${coupon.description}</p>
+                            ${isMyCoupon ? '<small class="text-muted">Created by you</small><br>' : ''}
+                            ${buttonHtml}
+                        </div>
+                    </div>
+                </div>
+            `;
+            gridContainer.appendChild(gridItem);
+        });
+
+        // Update totalSlides after slides are added
+        totalSlides = document.querySelectorAll('.slide').length;
+        console.log('Total slides:', totalSlides);
+        currentSlide = 0; // Reset to first slide
+        updateSlidePosition();
+    }
+
+    function filterCoupons() {
+        renderCoupons();
+    }
 
     let currentSlide = 0;
     let totalSlides = 0;
@@ -237,7 +295,6 @@
                 'Content-Type': 'application/json'
             }
         })
-
         .then(response => {
             if (!response.ok) {
                 throw new Error('Network response was not ok ' + response.statusText);
@@ -247,8 +304,36 @@
         .then(data => {
             console.log('Coupon redeemed:', data);
             alert('Coupon redeemed!');
+            // Reload coupons to update the display
+            location.reload();
         })
         .catch(error => console.error('Error redeeming coupon:', error));
+    }
+
+    function renewCoupon(couponId) {
+        if (!confirm('Are you sure you want to renew this coupon?')) {
+            return;
+        }
+
+        fetch(`/api/coupons/${couponId}/unredeem`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok ' + response.statusText);
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('Coupon renewed:', data);
+            alert('Coupon renewed!');
+            // Reload coupons to update the display
+            location.reload();
+        })
+        .catch(error => console.error('Error renewing coupon:', error));
     }
 
     function toggleView(view) {
