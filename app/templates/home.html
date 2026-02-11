@@ -29,8 +29,14 @@
 
 {% block content %}
 <div class="container mt-3 text-center">
-    <h1 class="text-center">Merry Christmas Baby!</h1>
-    <p class="text-center">Welcome, {{ current_user.username }}!</p>
+    <h1 class="text-center">💕 Welcome, {{ current_user.username }}! 💕</h1>
+    {% if current_user.be_my_valentine_accepted %}
+    <p class="text-center">
+        <a href="{{ url_for('main.valentine_countdown') }}" class="btn btn-danger btn-lg">
+            💖 Valentine's Day Countdown 💖
+        </a>
+    </p>
+    {% endif %}
 
     <div class="row justify-content-center">
         <div class="col-md-3">

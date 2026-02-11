@@ -33,12 +33,18 @@ def register():
 @auth.route("/login", methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
+        # Redirect to bemine if not accepted, otherwise home
+        if not current_user.be_my_valentine_accepted:
+            return redirect(url_for('main.bemine'))
         return redirect(url_for('main.home'))
     form = LoginForm()
     if form.validate_on_submit():
         user = User.query.filter((User.email == form.login.data) | (User.username == form.login.data)).first()
         if user and check_password_hash(user.password, form.password.data):
             login_user(user, remember=form.remember.data)
+            # Redirect to bemine if not accepted, otherwise home
+            if not user.be_my_valentine_accepted:
+                return redirect(url_for('main.bemine'))
             return redirect(url_for('main.home'))
         else:
             flash('Login Unsuccessful. Please check username/email and password', 'danger')

@@ -64,29 +64,13 @@
 </head>
 <body>
     <div class="content">
-        Be My Valentine? 💕
+        Be My Valentine?
     </div>
     <div class="buttons">
-        <button onclick="acceptValentine()">Yes ❤️</button>
-        <button onclick="acceptValentine()">Of Course! 💖</button>
+        <button onclick="alert('Yay!')">Yes</button>
+        <button onclick="alert('Yippee!!')">Yes!!</button>
     </div>
     <script>
-        function acceptValentine() {
-            fetch('/api/accept-valentine', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    window.location.href = '/valentine-countdown';
-                }
-            })
-            .catch(error => console.error('Error:', error));
-        }
-
         const flowerImages = [
             '/static/images/Pixel%20Art%20Flower%20Pack/Flower%201/Flower%201%20-%20BLUE.png',
             '/static/images/Pixel%20Art%20Flower%20Pack/Flower%201/Flower%201%20-%20COLORFUL.png',
@@ -113,14 +97,14 @@
             '/static/images/Pixel%20Art%20Flower%20Pack/Flower%206/Flower%206%20-%20TEAL.png',
             '/static/images/Pixel%20Art%20Flower%20Pack/Flower%207/Flower%207%20-%20BLUE.png',
             '/static/images/Pixel%20Art%20Flower%20Pack/Flower%207/Flower%207%20-%20RED.png',
-            '/static/images/Pixel%20Art%20Flower%207/Flower%207%20-%20YELLOW.png',
+            '/static/images/Pixel%20Art%20Flower%20Pack/Flower%207/Flower%207%20-%20YELLOW.png',
             '/static/images/Pixel%20Art%20Flower%20Pack/Flower%208/Flower%208%20-%20MAGENTA.png',
             '/static/images/Pixel%20Art%20Flower%20Pack/Flower%208/Flower%208%20-%20PINK.png',
             '/static/images/Pixel%20Art%20Flower%20Pack/Flower%208/Flower%208%20-%20PURPLE.png',
             '/static/images/Pixel%20Art%20Flower%20Pack/Flower%208/Flower%208%20-%20TEAL.png',
             '/static/images/Pixel%20Art%20Flower%20Pack/Flower%209/Flower%209%20-%20BLUE.png',
             '/static/images/Pixel%20Art%20Flower%20Pack/Flower%209/Flower%209%20-%20RED.png',
-            '/static/images/Pixel%20Art%20Flower%209/Flower%209%20-%20YELLOW.png',
+            '/static/images/Pixel%20Art%20Flower%20Pack/Flower%209/Flower%209%20-%20YELLOW.png',
             '/static/images/Pixel%20Art%20Flower%20Pack/Flower%2010/Flower%2010%20-%20MAGENTA.png',
             '/static/images/Pixel%20Art%20Flower%20Pack/Flower%2010/Flower%2010%20-%20PINK.png',
             '/static/images/Pixel%20Art%20Flower%20Pack/Flower%2010/Flower%2010%20-%20PURPLE.png',
@@ -145,12 +129,13 @@
             const imageUrl = flowerImages[Math.floor(Math.random() * flowerImages.length)];
             flower.style.backgroundImage = `url(${imageUrl})`;
             document.body.appendChild(flower);
+            console.log('Flower created with image:', imageUrl); // Log the image URL
             setTimeout(() => {
                 flower.remove();
-            }, 10000);
+            }, 10000); // Remove the flower after 10 seconds
         }
 
-        setInterval(createFlower, 100);
+        setInterval(createFlower, 100); // Create a new flower every 100ms
     </script>
 </body>
 </html>

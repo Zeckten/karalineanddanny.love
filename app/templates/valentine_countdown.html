@@ -1,0 +1,134 @@
+{% extends "base.html" %}
+
+{% block title %}Valentine's Day Countdown{% endblock %}
+
+{% block head %}
+<style>
+    body {
+        background: linear-gradient(135deg, #ffcccc 0%, #ff99cc 100%);
+    }
+    .countdown-container {
+        text-align: center;
+        padding: 50px 20px;
+    }
+    .countdown-title {
+        font-size: 3rem;
+        color: #ff0066;
+        font-weight: bold;
+        text-shadow: 2px 2px #ff99cc;
+        margin-bottom: 30px;
+    }
+    .countdown-display {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+        flex-wrap: wrap;
+        margin: 30px 0;
+    }
+    .time-unit {
+        background: white;
+        border: 3px solid #ff0066;
+        border-radius: 15px;
+        padding: 20px;
+        min-width: 120px;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+    .time-value {
+        font-size: 3rem;
+        color: #ff0066;
+        font-weight: bold;
+    }
+    .time-label {
+        font-size: 1rem;
+        color: #ff3399;
+        text-transform: uppercase;
+        margin-top: 10px;
+    }
+    .love-message {
+        font-size: 1.5rem;
+        color: #ff0066;
+        margin-top: 30px;
+        font-style: italic;
+    }
+    .heart {
+        color: #ff0066;
+        animation: heartbeat 1.5s infinite;
+    }
+    @keyframes heartbeat {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.1); }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="countdown-container">
+    <h1 class="countdown-title"><span class="heart">💕</span> Valentine's Day Countdown <span class="heart">💕</span></h1>
+    
+    <div class="countdown-display">
+        <div class="time-unit">
+            <div class="time-value" id="days">--</div>
+            <div class="time-label">Days</div>
+        </div>
+        <div class="time-unit">
+            <div class="time-value" id="hours">--</div>
+            <div class="time-label">Hours</div>
+        </div>
+        <div class="time-unit">
+            <div class="time-value" id="minutes">--</div>
+            <div class="time-label">Minutes</div>
+        </div>
+        <div class="time-unit">
+            <div class="time-value" id="seconds">--</div>
+            <div class="time-label">Seconds</div>
+        </div>
+    </div>
+    
+    <p class="love-message">Until we celebrate our love! ❤️</p>
+    
+    <div class="mt-4">
+        <a href="{{ url_for('main.home') }}" class="btn btn-danger btn-lg">Back to Home</a>
+    </div>
+</div>
+
+<script>
+function updateCountdown() {
+    const now = new Date();
+    const currentYear = now.getFullYear();
+    
+    // Valentine's Day is February 14th
+    let valentinesDay = new Date(currentYear, 1, 14, 0, 0, 0); // Month is 0-indexed (1 = February)
+    
+    // If Valentine's Day has passed this year, count down to next year
+    if (now > valentinesDay) {
+        valentinesDay = new Date(currentYear + 1, 1, 14, 0, 0, 0);
+    }
+    
+    const timeDiff = valentinesDay - now;
+    
+    if (timeDiff <= 0) {
+        // It's Valentine's Day!
+        document.getElementById('days').textContent = '00';
+        document.getElementById('hours').textContent = '00';
+        document.getElementById('minutes').textContent = '00';
+        document.getElementById('seconds').textContent = '00';
+        document.querySelector('.love-message').textContent = "Happy Valentine's Day! 💖";
+        return;
+    }
+    
+    const days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((timeDiff % (1000 * 60)) / 1000);
+    
+    document.getElementById('days').textContent = String(days).padStart(2, '0');
+    document.getElementById('hours').textContent = String(hours).padStart(2, '0');
+    document.getElementById('minutes').textContent = String(minutes).padStart(2, '0');
+    document.getElementById('seconds').textContent = String(seconds).padStart(2, '0');
+}
+
+// Update immediately and then every second
+updateCountdown();
+setInterval(updateCountdown, 1000);
+</script>
+{% endblock %}

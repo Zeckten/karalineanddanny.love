@@ -13,6 +13,7 @@ class User(db.Model, UserMixin):
     password = db.Column(db.Text, nullable=False)
     nylas_grant_id = db.Column(db.String(255), unique=False, nullable=True)
     admin = db.Column(db.Boolean, default=False)
+    be_my_valentine_accepted = db.Column(db.Boolean, default=False)
 
     def __repr__(self):
         return f"User('{self.username}', '{self.email}')"

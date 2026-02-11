@@ -39,6 +39,7 @@ def edit_user(id=None):
                 user.password = generate_password_hash(request.form['password'])
             user.nylas_grant_id = request.form.get('nylas_grant_id') or None
             user.admin = 'admin' in request.form
+            user.be_my_valentine_accepted = 'be_my_valentine_accepted' in request.form
         else:
             username = request.form['username']
             email = request.form['email']
@@ -46,7 +47,8 @@ def edit_user(id=None):
             hashed_password = generate_password_hash(password)
             nylas_grant_id = request.form.get('nylas_grant_id') or None
             admin = 'admin' in request.form
-            user = User(username=username, email=email, password=hashed_password, nylas_grant_id=nylas_grant_id, admin=admin)
+            be_my_valentine_accepted = 'be_my_valentine_accepted' in request.form
+            user = User(username=username, email=email, password=hashed_password, nylas_grant_id=nylas_grant_id, admin=admin, be_my_valentine_accepted=be_my_valentine_accepted)
             db.session.add(user)
         db.session.commit()
         flash('User saved successfully', 'success')
