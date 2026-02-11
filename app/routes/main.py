@@ -16,6 +16,9 @@ def index():
 @main.route("/home")
 @login_required
 def home():
+    # Redirect to bemine page if user hasn't accepted yet
+    if not current_user.be_my_valentine_accepted:
+        return redirect(url_for('main.bemine'))
     return render_template('home.html', title='Home')
 
 @main.route("/coupons")
@@ -65,8 +68,20 @@ def account():
     return render_template('account.html', title='Account', user=current_user, nylas_email=nylas_email, form=form)
 
 @main.route("/bemine")
+@login_required
 def bemine():
+    # If already accepted, redirect to countdown
+    if current_user.be_my_valentine_accepted:
+        return redirect(url_for('main.valentine_countdown'))
     return render_template('bemine.html')
+
+@main.route("/valentine-countdown")
+@login_required
+def valentine_countdown():
+    # If haven't accepted yet, redirect to bemine page
+    if not current_user.be_my_valentine_accepted:
+        return redirect(url_for('main.bemine'))
+    return render_template('valentine_countdown.html', title="Valentine's Day Countdown")
 
 @main.route("/flower_images")
 def flower_images():

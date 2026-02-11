@@ -287,3 +287,10 @@ def toggle_hide_slide(title):
 def clear_hidden_slides():
     session['hidden_slides'] = []
     return jsonify({'status': 'success', 'hidden_slides': []})
+
+@api.route('/accept-valentine', methods=['POST'])
+@login_required
+def accept_valentine():
+    current_user.be_my_valentine_accepted = True
+    db.session.commit()
+    return jsonify({'success': True, 'message': 'You said yes! 💖'})
