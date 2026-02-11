@@ -31,7 +31,8 @@ class Coupon(db.Model):
             'title': self.title,
             'description': self.description,
             'image': self.image,
-            'redeemed': self.redeemed
+            'redeemed': self.redeemed,
+            'creator': self.creator
         }
 
 class DateIdea(db.Model):
