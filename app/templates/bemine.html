@@ -56,9 +56,22 @@
             border: none;
             border-radius: 5px;
             cursor: pointer;
+            transition: all 0.3s ease;
         }
         .buttons button:hover {
             background-color: #ff3399;
+        }
+        #noButton {
+            background-color: #999;
+        }
+        #noButton:hover {
+            background-color: #ff0066;
+        }
+        #noButton:hover::after {
+            content: 'Yes! 💖';
+        }
+        #noButton:hover span {
+            display: none;
         }
     </style>
 </head>
@@ -68,7 +81,7 @@
     </div>
     <div class="buttons">
         <button onclick="acceptValentine()">Yes ❤️</button>
-        <button onclick="acceptValentine()">Of Course! 💖</button>
+        <button id="noButton" onclick="acceptValentine()"><span>No 😢</span></button>
     </div>
     <script>
         function acceptValentine() {
