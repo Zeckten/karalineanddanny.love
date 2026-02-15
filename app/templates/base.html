@@ -13,6 +13,7 @@
             padding: 0 20px; /* Add padding to move the navbar away from the edge */
             align-items: left;
             position: relative;
+            transition: all 0.3s ease;
         }
         .navbar-nav .nav-item .nav-link {
             margin: 0 5px;
@@ -34,6 +35,32 @@
         }
         .container {
             padding-bottom: 20px; /* Add padding at the bottom of every page */
+        }
+
+        /* Valentine's Season Navbar (February) */
+        .valentine-season .navbar {
+            background: linear-gradient(135deg, rgba(255, 102, 153, 0.9), rgba(255, 0, 102, 0.85));
+            box-shadow: 0 2px 12px rgba(255, 0, 102, 0.3);
+        }
+        .valentine-season .navbar-brand {
+            color: #fff !important;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.15);
+        }
+        .valentine-season .navbar-nav .btn-outline-info,
+        .valentine-season .navbar-nav .btn-outline-warning,
+        .valentine-season .navbar-nav .btn-outline-primary {
+            color: #fff;
+            border-color: rgba(255, 255, 255, 0.6);
+        }
+        .valentine-season .navbar-nav .btn-outline-info:hover,
+        .valentine-season .navbar-nav .btn-outline-warning:hover,
+        .valentine-season .navbar-nav .btn-outline-primary:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+            border-color: #fff;
+            color: #fff;
+        }
+        .valentine-season .navbar-toggler-icon {
+            filter: brightness(0) invert(1);
         }
     </style>
     {% block head %}{% endblock %}
@@ -70,5 +97,13 @@
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     {% block scripts %}{% endblock %}
+    <script>
+        // Activate Valentine's season theme during February
+        (function() {
+            if (new Date().getMonth() === 1) { // 0-indexed: 1 = February
+                document.body.classList.add('valentine-season');
+            }
+        })();
+    </script>
 </body>
 </html>

@@ -33,11 +33,22 @@
         justify-content: center;
         flex-direction: column;
         padding: 20px;
-        border: 2px dashed #ccc;
-        border-radius: 10px;
-        background-color: #fff;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        border: 2px solid #ff99cc;
+        border-radius: 16px;
+        background: linear-gradient(135deg, #fff5f8 0%, #ffffff 100%);
+        box-shadow: 0 4px 12px rgba(255, 0, 102, 0.1);
         margin: 0;
+    }
+    .slide::before {
+        content: '';
+        position: absolute;
+        top: 8px;
+        left: 8px;
+        right: 8px;
+        bottom: 8px;
+        border: 1px dashed #ffb3d1;
+        border-radius: 12px;
+        pointer-events: none;
     }
     .slide img {
         max-width: 100%;
@@ -52,7 +63,7 @@
     .slide .text h2 {
         margin-bottom: 10px;
         font-size: 24px;
-        color: #333;
+        color: #cc0052;
     }
     .slide .text p {
         font-size: 16px;
@@ -83,12 +94,28 @@
     .grid-item {
         aspect-ratio: 3/2;
         position: relative;
-        border: 2px dashed #ccc;
-        border-radius: 10px;
-        background-color: #fff;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        border: 2px solid #ff99cc;
+        border-radius: 16px;
+        background: linear-gradient(135deg, #fff5f8 0%, #ffffff 100%);
+        box-shadow: 0 4px 12px rgba(255, 0, 102, 0.1);
         padding: 20px;
         text-align: center;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .grid-item::before {
+        content: '';
+        position: absolute;
+        top: 8px;
+        left: 8px;
+        right: 8px;
+        bottom: 8px;
+        border: 1px dashed #ffb3d1;
+        border-radius: 12px;
+        pointer-events: none;
+    }
+    .grid-item:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 18px rgba(255, 0, 102, 0.18);
     }
     .grid-item-container {
         position: relative;
@@ -111,15 +138,78 @@
     .grid-item .text h2 {
         margin-bottom: 10px;
         font-size: 18px;
-        color: #333;
+        color: #cc0052;
     }
     .grid-item .text p {
         font-size: 14px;
         color: #666;
     }
     .redeemed {
-        background-color: #e0e0e0;
+        background: linear-gradient(135deg, #f0f0f0 0%, #e8e8e8 100%) !important;
+        border-color: #ccc !important;
         color: #a0a0a0;
+    }
+    .redeemed::before {
+        border-color: #ddd !important;
+    }
+    .redeemed .text h2 {
+        color: #999 !important;
+    }
+
+    /* Wax-seal style Redeem button */
+    .btn-redeem {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        background: radial-gradient(circle at 35% 35%, #ff3366, #cc0033);
+        color: #fff;
+        border: none;
+        border-radius: 50px;
+        padding: 8px 22px;
+        font-size: 0.95rem;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+        cursor: pointer;
+        box-shadow: 0 3px 8px rgba(204, 0, 51, 0.35), inset 0 1px 0 rgba(255,255,255,0.2);
+        transition: all 0.2s ease;
+        text-transform: uppercase;
+    }
+    .btn-redeem:hover {
+        background: radial-gradient(circle at 35% 35%, #ff4d7a, #e60040);
+        transform: scale(1.05);
+        box-shadow: 0 4px 14px rgba(204, 0, 51, 0.45), inset 0 1px 0 rgba(255,255,255,0.2);
+        color: #fff;
+    }
+    .btn-redeem:active {
+        transform: scale(0.97);
+    }
+    .btn-redeem::before {
+        content: '\2764';
+        font-size: 1rem;
+    }
+
+    /* Corner heart decorations on coupon cards */
+    .coupon-heart-corner {
+        position: absolute;
+        color: #ff99cc;
+        font-size: 1rem;
+        opacity: 0.6;
+        pointer-events: none;
+    }
+    .coupon-heart-corner.top-left { top: 12px; left: 14px; }
+    .coupon-heart-corner.top-right { top: 12px; right: 14px; }
+    .coupon-heart-corner.bottom-left { bottom: 12px; left: 14px; }
+    .coupon-heart-corner.bottom-right { bottom: 12px; right: 14px; }
+
+    /* Confetti canvas overlay */
+    #confetti-canvas {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 9999;
     }
 </style>
 {% endblock %}
@@ -140,6 +230,7 @@
         </div>
     </div>
 
+    <canvas id="confetti-canvas"></canvas>
     <div class="slider" id="sliderView">
         <div class="slides" id="slides"></div>
         <div class="navigation mt-3">
@@ -211,17 +302,26 @@
                     buttonHtml = `<span class="badge badge-info">Your Coupon</span>`;
                 }
             } else {
-                // Other's coupon - show Redeem button or Redeemed status
+                // Other's coupon - show wax-seal Redeem button or Redeemed status
                 if (coupon.redeemed) {
                     buttonHtml = '<button class="btn btn-secondary" disabled>Redeemed</button>';
                 } else {
-                    buttonHtml = `<button class="btn btn-primary" onclick="redeemCoupon(${coupon.id})">Redeem</button>`;
+                    buttonHtml = `<button class="btn-redeem" onclick="redeemCoupon(${coupon.id})">Redeem</button>`;
                 }
             }
+
+            // Heart corner decorations
+            const heartCorners = `
+                <span class="coupon-heart-corner top-left">&hearts;</span>
+                <span class="coupon-heart-corner top-right">&hearts;</span>
+                <span class="coupon-heart-corner bottom-left">&hearts;</span>
+                <span class="coupon-heart-corner bottom-right">&hearts;</span>
+            `;
 
             const slide = document.createElement('div');
             slide.className = 'slide coupon' + (coupon.redeemed ? ' redeemed' : '');
             slide.innerHTML = `
+                ${heartCorners}
                 <img src="${coupon.image}" alt="${coupon.title}">
                 <div class="text">
                     <h2>${coupon.title}</h2>
@@ -235,6 +335,7 @@
             const gridItem = document.createElement('div');
             gridItem.className = 'grid-item coupon' + (coupon.redeemed ? ' redeemed' : '');
             gridItem.innerHTML = `
+                ${heartCorners}
                 <div class="grid-item-container">
                     <div class="grid-item-content">
                         <img src="${coupon.image}" alt="${coupon.title}">
@@ -303,11 +404,94 @@
         })
         .then(data => {
             console.log('Coupon redeemed:', data);
-            alert('Coupon redeemed!');
-            // Reload coupons to update the display
-            location.reload();
+            launchConfetti();
+            // Reload after confetti finishes
+            setTimeout(() => location.reload(), 2500);
         })
         .catch(error => console.error('Error redeeming coupon:', error));
+    }
+
+    // Confetti animation engine
+    function launchConfetti() {
+        const canvas = document.getElementById('confetti-canvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const pieces = [];
+        const colors = ['#ff0066', '#ff3399', '#ff6699', '#ff99cc', '#ffccdd', '#cc0052', '#ff4da6', '#ffb3d1', '#e6005c', '#ff1a8c'];
+        const shapes = ['circle', 'heart', 'rect'];
+        const total = 120;
+
+        for (let i = 0; i < total; i++) {
+            pieces.push({
+                x: canvas.width / 2 + (Math.random() - 0.5) * 200,
+                y: canvas.height / 2,
+                vx: (Math.random() - 0.5) * 16,
+                vy: Math.random() * -14 - 4,
+                size: Math.random() * 8 + 4,
+                color: colors[Math.floor(Math.random() * colors.length)],
+                shape: shapes[Math.floor(Math.random() * shapes.length)],
+                rotation: Math.random() * 360,
+                rotSpeed: (Math.random() - 0.5) * 10,
+                gravity: 0.18 + Math.random() * 0.08,
+                opacity: 1
+            });
+        }
+
+        let frame = 0;
+        const maxFrames = 150;
+
+        function drawHeart(ctx, x, y, size) {
+            ctx.beginPath();
+            const s = size / 2;
+            ctx.moveTo(x, y + s / 4);
+            ctx.bezierCurveTo(x, y - s / 2, x - s, y - s / 2, x - s, y + s / 4);
+            ctx.bezierCurveTo(x - s, y + s, x, y + s * 1.2, x, y + s * 1.5);
+            ctx.bezierCurveTo(x, y + s * 1.2, x + s, y + s, x + s, y + s / 4);
+            ctx.bezierCurveTo(x + s, y - s / 2, x, y - s / 2, x, y + s / 4);
+            ctx.fill();
+        }
+
+        function animate() {
+            frame++;
+            if (frame > maxFrames) {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                return;
+            }
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            pieces.forEach(p => {
+                p.x += p.vx;
+                p.vy += p.gravity;
+                p.y += p.vy;
+                p.vx *= 0.99;
+                p.rotation += p.rotSpeed;
+                if (frame > maxFrames * 0.6) {
+                    p.opacity = Math.max(0, 1 - (frame - maxFrames * 0.6) / (maxFrames * 0.4));
+                }
+
+                ctx.save();
+                ctx.globalAlpha = p.opacity;
+                ctx.translate(p.x, p.y);
+                ctx.rotate((p.rotation * Math.PI) / 180);
+                ctx.fillStyle = p.color;
+
+                if (p.shape === 'heart') {
+                    drawHeart(ctx, 0, 0, p.size);
+                } else if (p.shape === 'circle') {
+                    ctx.beginPath();
+                    ctx.arc(0, 0, p.size / 2, 0, Math.PI * 2);
+                    ctx.fill();
+                } else {
+                    ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size * 0.6);
+                }
+                ctx.restore();
+            });
+
+            requestAnimationFrame(animate);
+        }
+        animate();
     }
 
     function renewCoupon(couponId) {

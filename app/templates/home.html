@@ -24,6 +24,44 @@
         padding: 1rem;
         min-width: 100%;
     }
+
+    /* Falling Hearts (February only - activated via JS) */
+    .falling-heart {
+        position: fixed;
+        top: -20px;
+        z-index: 0;
+        pointer-events: none;
+        font-size: 1.2rem;
+        opacity: 0;
+        animation: heartFall linear forwards;
+    }
+    @keyframes heartFall {
+        0% {
+            transform: translateY(0) rotate(0deg) scale(1);
+            opacity: 0.9;
+        }
+        25% {
+            transform: translateY(25vh) rotate(30deg) scale(1.05);
+            opacity: 0.8;
+        }
+        50% {
+            transform: translateY(50vh) rotate(-20deg) scale(0.95);
+            opacity: 0.6;
+        }
+        75% {
+            transform: translateY(75vh) rotate(15deg) scale(1);
+            opacity: 0.4;
+        }
+        100% {
+            transform: translateY(105vh) rotate(-10deg) scale(0.9);
+            opacity: 0;
+        }
+    }
+    /* Ensure page content stays above the hearts */
+    .container {
+        position: relative;
+        z-index: 1;
+    }
 </style>
 {% endblock %}
 
@@ -81,4 +119,37 @@
         </div>
     </div>
 </div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Falling hearts animation - active during February
+    (function() {
+        if (new Date().getMonth() !== 1) return; // Only in February
+
+        const hearts = ['&#x2764;&#xFE0F;', '&#x1F497;', '&#x1F496;', '&#x1F495;', '&#x1F49C;', '&#x1F49B;', '&#x1F49A;'];
+        const colors = ['#ff0066', '#ff3399', '#ff6699', '#cc0052', '#e60073', '#ff1a8c', '#ff4da6'];
+
+        function spawnHeart() {
+            const el = document.createElement('div');
+            el.className = 'falling-heart';
+            el.innerHTML = hearts[Math.floor(Math.random() * hearts.length)];
+            el.style.left = (Math.random() * 100) + 'vw';
+            el.style.fontSize = (Math.random() * 1.2 + 0.8) + 'rem';
+            el.style.color = colors[Math.floor(Math.random() * colors.length)];
+            el.style.animationDuration = (Math.random() * 4 + 6) + 's';
+            el.style.animationDelay = (Math.random() * 0.5) + 's';
+            document.body.appendChild(el);
+
+            el.addEventListener('animationend', function() { el.remove(); });
+        }
+
+        // Spawn hearts at a gentle rate
+        setInterval(spawnHeart, 400);
+        // Initial burst of a few hearts
+        for (let i = 0; i < 8; i++) {
+            setTimeout(spawnHeart, i * 150);
+        }
+    })();
+</script>
 {% endblock %}
