@@ -1,134 +1,229 @@
 {% extends "base.html" %}
 
-{% block title %}Valentine's Day Countdown{% endblock %}
+{% block title %}Happy Valentine's Day{% endblock %}
 
 {% block head %}
 <style>
     body {
-        background: linear-gradient(135deg, #ffcccc 0%, #ff99cc 100%);
+        background: linear-gradient(135deg, #ffcccc 0%, #ff99cc 50%, #ff6699 100%);
+        overflow-x: hidden;
     }
-    .countdown-container {
+
+    .splash {
         text-align: center;
-        padding: 50px 20px;
+        padding: 40px 20px 60px;
+        position: relative;
+        z-index: 1;
     }
-    .countdown-title {
-        font-size: 3rem;
-        color: #ff0066;
-        font-weight: bold;
-        text-shadow: 2px 2px #ff99cc;
+
+    /* Main title */
+    .splash-title {
+        font-size: 3.5rem;
+        font-weight: 800;
+        color: #fff;
+        text-shadow: 0 3px 12px rgba(204, 0, 51, 0.4), 0 0 40px rgba(255, 102, 153, 0.3);
+        margin-bottom: 8px;
+        animation: titlePulse 3s ease-in-out infinite;
+    }
+    @keyframes titlePulse {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.03); }
+    }
+
+    .splash-year {
+        font-size: 1.4rem;
+        color: rgba(255, 255, 255, 0.85);
+        font-weight: 300;
+        letter-spacing: 4px;
+        text-transform: uppercase;
         margin-bottom: 30px;
     }
-    .countdown-display {
-        display: flex;
-        justify-content: center;
-        gap: 20px;
-        flex-wrap: wrap;
-        margin: 30px 0;
+
+    /* Big beating heart */
+    .big-heart {
+        font-size: 6rem;
+        display: inline-block;
+        animation: bigHeartbeat 1.2s ease-in-out infinite;
+        filter: drop-shadow(0 4px 20px rgba(255, 0, 80, 0.5));
+        margin: 10px 0 20px;
     }
-    .time-unit {
-        background: white;
-        border: 3px solid #ff0066;
-        border-radius: 15px;
-        padding: 20px;
-        min-width: 120px;
-        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    @keyframes bigHeartbeat {
+        0%, 100% { transform: scale(1); }
+        15% { transform: scale(1.15); }
+        30% { transform: scale(1); }
+        45% { transform: scale(1.1); }
+        60% { transform: scale(1); }
     }
-    .time-value {
-        font-size: 3rem;
-        color: #ff0066;
-        font-weight: bold;
+
+    /* Love letter card */
+    .love-letter {
+        max-width: 520px;
+        margin: 0 auto 30px;
+        background: rgba(255, 255, 255, 0.92);
+        border-radius: 18px;
+        padding: 30px 35px;
+        box-shadow: 0 8px 30px rgba(204, 0, 51, 0.18);
+        position: relative;
     }
-    .time-label {
+    .love-letter::before {
+        content: '';
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        right: 10px;
+        bottom: 10px;
+        border: 1px dashed #ffb3d1;
+        border-radius: 12px;
+        pointer-events: none;
+    }
+    .love-letter-to {
         font-size: 1rem;
-        color: #ff3399;
-        text-transform: uppercase;
-        margin-top: 10px;
-    }
-    .love-message {
-        font-size: 1.5rem;
-        color: #ff0066;
-        margin-top: 30px;
+        color: #cc0052;
+        text-align: left;
+        margin-bottom: 12px;
         font-style: italic;
     }
-    .heart {
-        color: #ff0066;
-        animation: heartbeat 1.5s infinite;
+    .love-letter-body {
+        font-size: 1.15rem;
+        color: #555;
+        line-height: 1.8;
+        text-align: left;
     }
-    @keyframes heartbeat {
-        0%, 100% { transform: scale(1); }
-        50% { transform: scale(1.1); }
+    .love-letter-sign {
+        font-size: 1.1rem;
+        color: #cc0052;
+        text-align: right;
+        margin-top: 15px;
+        font-style: italic;
+    }
+
+    /* Quick links */
+    .splash-links {
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+        flex-wrap: wrap;
+        margin-top: 10px;
+    }
+    .splash-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: rgba(255, 255, 255, 0.9);
+        color: #cc0052;
+        border: 2px solid rgba(255, 255, 255, 0.6);
+        border-radius: 50px;
+        padding: 10px 24px;
+        font-size: 1rem;
+        font-weight: 600;
+        text-decoration: none;
+        transition: all 0.25s ease;
+        box-shadow: 0 3px 10px rgba(204, 0, 51, 0.15);
+    }
+    .splash-link:hover {
+        background: #fff;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 18px rgba(204, 0, 51, 0.25);
+        color: #ff0066;
+        text-decoration: none;
+    }
+
+    /* Floating pixel flowers */
+    .floating-flower {
+        position: fixed;
+        width: 40px;
+        height: 40px;
+        background-size: contain;
+        background-repeat: no-repeat;
+        pointer-events: none;
+        z-index: 0;
+        opacity: 0;
+        animation: floatUp linear forwards;
+    }
+    @keyframes floatUp {
+        0% {
+            transform: translateY(0) rotate(0deg);
+            opacity: 0;
+        }
+        10% {
+            opacity: 0.8;
+        }
+        50% {
+            opacity: 0.6;
+        }
+        100% {
+            transform: translateY(-110vh) rotate(60deg);
+            opacity: 0;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .splash-title { font-size: 2.2rem; }
+        .big-heart { font-size: 4rem; }
+        .love-letter { padding: 22px 20px; }
     }
 </style>
 {% endblock %}
 
 {% block content %}
-<div class="countdown-container">
-    <h1 class="countdown-title"><span class="heart">💕</span> Valentine's Day is in: <span class="heart">💕</span></h1>
+<div class="splash">
+    <h1 class="splash-title">Happy Valentine's Day!</h1>
+    <div class="splash-year">{{ current_user.username }}, this one's for you</div>
 
-    <div class="countdown-display">
-        <div class="time-unit">
-            <div class="time-value" id="days">--</div>
-            <div class="time-label">Days</div>
+    <div class="big-heart">&#x1F496;</div>
+
+    <div class="love-letter">
+        <div class="love-letter-to">My dearest Valentine,</div>
+        <div class="love-letter-body">
+            Every day with you feels like Valentine's Day.
+            Thank you for being the best part of my life &mdash;
+            today, tomorrow, and always.
         </div>
-        <div class="time-unit">
-            <div class="time-value" id="hours">--</div>
-            <div class="time-label">Hours</div>
-        </div>
-        <div class="time-unit">
-            <div class="time-value" id="minutes">--</div>
-            <div class="time-label">Minutes</div>
-        </div>
-        <div class="time-unit">
-            <div class="time-value" id="seconds">--</div>
-            <div class="time-label">Seconds</div>
-        </div>
+        <div class="love-letter-sign">With all my love &hearts;</div>
     </div>
 
-    <p class="love-message">Stay tuned... ❤️</p>
-    
-    <div class="mt-4">
-        <a href="{{ url_for('main.home') }}" class="btn btn-danger btn-lg">Back to Home</a>
+    <div class="splash-links">
+        <a href="{{ url_for('main.coupons') }}" class="splash-link">&#x1F48C; Coupons</a>
+        <a href="{{ url_for('main.spinner') }}" class="splash-link">&#x1F3B0; Date Spinner</a>
+        <a href="{{ url_for('main.home') }}" class="splash-link">&#x1F3E0; Home</a>
     </div>
 </div>
+{% endblock %}
 
+{% block scripts %}
 <script>
-function updateCountdown() {
-    const now = new Date();
-    const currentYear = now.getFullYear();
-    
-    // Valentine's Day is February 14th
-    let valentinesDay = new Date(currentYear, 1, 14, 0, 0, 0); // Month is 0-indexed (1 = February)
-    
-    // If Valentine's Day has passed this year, count down to next year
-    if (now > valentinesDay) {
-        valentinesDay = new Date(currentYear + 1, 1, 14, 0, 0, 0);
-    }
-    
-    const timeDiff = valentinesDay - now;
-    
-    if (timeDiff <= 0) {
-        // It's Valentine's Day!
-        document.getElementById('days').textContent = '00';
-        document.getElementById('hours').textContent = '00';
-        document.getElementById('minutes').textContent = '00';
-        document.getElementById('seconds').textContent = '00';
-        document.querySelector('.love-message').textContent = "Happy Valentine's Day! 💖";
-        return;
-    }
-    
-    const days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
-    const hours = Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    const minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
-    const seconds = Math.floor((timeDiff % (1000 * 60)) / 1000);
-    
-    document.getElementById('days').textContent = String(days).padStart(2, '0');
-    document.getElementById('hours').textContent = String(hours).padStart(2, '0');
-    document.getElementById('minutes').textContent = String(minutes).padStart(2, '0');
-    document.getElementById('seconds').textContent = String(seconds).padStart(2, '0');
-}
+(function() {
+    const flowerImages = [
+        '/static/images/Pixel%20Art%20Flower%20Pack/Flower%201/Flower%201%20-%20RED.png',
+        '/static/images/Pixel%20Art%20Flower%20Pack/Flower%202/Flower%202%20-%20PINK.png',
+        '/static/images/Pixel%20Art%20Flower%20Pack/Flower%202/Flower%202%20-%20MAGENTA.png',
+        '/static/images/Pixel%20Art%20Flower%20Pack/Flower%204/Flower%204%20-%20PINK.png',
+        '/static/images/Pixel%20Art%20Flower%20Pack/Flower%206/Flower%206%20-%20PINK.png',
+        '/static/images/Pixel%20Art%20Flower%20Pack/Flower%208/Flower%208%20-%20PINK.png',
+        '/static/images/Pixel%20Art%20Flower%20Pack/Flower%2010/Flower%2010%20-%20PINK.png',
+        '/static/images/Pixel%20Art%20Flower%20Pack/Flower%2012/Flower%2012%20-%20PINK.png',
+        '/static/images/Pixel%20Art%20Flower%20Pack/Flower%204/Flower%204%20-%20MAGENTA.png',
+        '/static/images/Pixel%20Art%20Flower%20Pack/Flower%201/Flower%201%20-%20COLORFUL.png'
+    ];
 
-// Update immediately and then every second
-updateCountdown();
-setInterval(updateCountdown, 1000);
+    function spawnFlower() {
+        const el = document.createElement('div');
+        el.className = 'floating-flower';
+        el.style.left = (Math.random() * 100) + 'vw';
+        el.style.bottom = '-50px';
+        el.style.width = (Math.random() * 25 + 30) + 'px';
+        el.style.height = el.style.width;
+        el.style.backgroundImage = 'url(' + flowerImages[Math.floor(Math.random() * flowerImages.length)] + ')';
+        el.style.animationDuration = (Math.random() * 6 + 8) + 's';
+        el.style.animationDelay = (Math.random() * 0.5) + 's';
+        document.body.appendChild(el);
+        el.addEventListener('animationend', function() { el.remove(); });
+    }
+
+    setInterval(spawnFlower, 600);
+    for (let i = 0; i < 6; i++) {
+        setTimeout(spawnFlower, i * 200);
+    }
+})();
 </script>
 {% endblock %}

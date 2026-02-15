@@ -81,7 +81,7 @@ def valentine_countdown():
     # If haven't accepted yet, redirect to bemine page
     if not current_user.be_my_valentine_accepted:
         return redirect(url_for('main.bemine'))
-    return render_template('valentine_countdown.html', title="Valentine's Day Countdown")
+    return render_template('valentine_countdown.html', title="Happy Valentine's Day")
 
 @main.route("/flower_images")
 def flower_images():
