@@ -55,48 +55,6 @@
         60% { transform: scale(1); }
     }
 
-    /* Love letter card */
-    .love-letter {
-        max-width: 520px;
-        margin: 0 auto 30px;
-        background: rgba(255, 255, 255, 0.92);
-        border-radius: 18px;
-        padding: 30px 35px;
-        box-shadow: 0 8px 30px rgba(204, 0, 51, 0.18);
-        position: relative;
-    }
-    .love-letter::before {
-        content: '';
-        position: absolute;
-        top: 10px;
-        left: 10px;
-        right: 10px;
-        bottom: 10px;
-        border: 1px dashed #ffb3d1;
-        border-radius: 12px;
-        pointer-events: none;
-    }
-    .love-letter-to {
-        font-size: 1rem;
-        color: #cc0052;
-        text-align: left;
-        margin-bottom: 12px;
-        font-style: italic;
-    }
-    .love-letter-body {
-        font-size: 1.15rem;
-        color: #555;
-        line-height: 1.8;
-        text-align: left;
-    }
-    .love-letter-sign {
-        font-size: 1.1rem;
-        color: #cc0052;
-        text-align: right;
-        margin-top: 15px;
-        font-style: italic;
-    }
-
     /* Quick links */
     .splash-links {
         display: flex;
@@ -160,7 +118,6 @@
     @media (max-width: 576px) {
         .splash-title { font-size: 2.2rem; }
         .big-heart { font-size: 4rem; }
-        .love-letter { padding: 22px 20px; }
     }
 </style>
 {% endblock %}
@@ -171,16 +128,6 @@
     <div class="splash-year">{{ current_user.username }}, this one's for you</div>
 
     <div class="big-heart">&#x1F496;</div>
-
-    <div class="love-letter">
-        <div class="love-letter-to">My dearest Valentine,</div>
-        <div class="love-letter-body">
-            Every day with you feels like Valentine's Day.
-            Thank you for being the best part of my life &mdash;
-            today, tomorrow, and always.
-        </div>
-        <div class="love-letter-sign">With all my love &hearts;</div>
-    </div>
 
     <div class="splash-links">
         <a href="{{ url_for('main.coupons') }}" class="splash-link">&#x1F48C; Coupons</a>
